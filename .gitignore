@@ -47,3 +47,15 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Large data files — download instructions in README
+data/raw/*.sav
+data/raw/*.zip
+data/raw/*.gz
+data/processed/*.rds
+data/processed/*.csv
+
+# R environment
+.Rproj.user/
+.Rhistory
+*.Rproj
