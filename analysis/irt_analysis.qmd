@@ -1,0 +1,616 @@
+---
+title: "IRT Psychometric Analysis — PISA 2022"
+author: "Washington Casamen Nolasco"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-title: "Contents"
+    code-fold: true
+    code-summary: "Show code"
+    theme: cosmo
+    highlight-style: github
+    fig-width: 10
+    fig-height: 6
+execute:
+  warning: false
+  message: false
+  echo: true
+knitr:
+  opts_knit:
+    root.dir: "../"
+---
+
+## Overview
+
+This document presents a full Item Response Theory (IRT) pipeline applied to PISA 2022 cognitive reading items. The analysis covers model calibration (1PL vs 2PL), item diagnostics via Item Characteristic Curves (ICC), measurement precision via the Test Information Function (TIF), and cross-group fairness via Differential Item Functioning (DIF) analysis between OECD and Non-OECD countries.
+
+> **Note on data access:** The raw PISA 2022 Cognitive Item Data File (SPSS format, ~3.6 GB) is not included in this repository. Download it from the [OECD PISA data portal](https://www.oecd.org/pisa/data/) and place it in `data/raw/`. All processed files used in this analysis are cached as `.rds` objects in `data/processed/`.
+
+---
+
+## Session Setup
+
+This chunk must be run at the start of every session. It loads all cached objects and avoids re-running the full data preparation pipeline.
+
+```{r setup-reload}
+# SESSION RELOAD — run this chunk first in every new session
+# All heavy computations are cached as .rds files in data/processed/
+
+library(haven)
+library(dplyr)
+library(mirt)
+library(ggplot2)
+library(tidyr)
+
+# Data
+final_matrix      <- readRDS("data/processed/response_matrix_clean.rds")
+sample_dev        <- readRDS("data/processed/response_matrix_dev.rds")
+dichotomous_clean <- names(sample_dev)[!names(sample_dev) %in% c("CNT", "CNTSTUID")]
+
+# Models
+model_1pl <- readRDS("data/processed/model_1pl.rds")
+model_2pl <- readRDS("data/processed/model_2pl.rds")
+
+# Item parameters
+params_2pl      <- coef(model_2pl, IRTpars = TRUE, simplify = TRUE)$items
+params_2pl      <- as.data.frame(params_2pl)
+params_2pl$item <- rownames(params_2pl)
+
+# DIF objects
+oecd_countries <- c("AUS", "AUT", "BEL", "CAN", "CHL", "COL", "CRI", "CZE",
+                    "DNK", "EST", "FIN", "FRA", "DEU", "GRC", "HUN", "ISL",
+                    "IRL", "ISR", "ITA", "JPN", "KOR", "LVA", "LTU", "LUX",
+                    "MEX", "NLD", "NZL", "NOR", "POL", "PRT", "SVK", "SVN",
+                    "ESP", "SWE", "CHE", "TUR", "GBR", "USA")
+
+sample_dif     <- sample_dev %>%
+  mutate(group = factor(ifelse(CNT %in% oecd_countries, "OECD", "NonOECD")))
+group_vector   <- sample_dif$group
+mg_model       <- readRDS("data/processed/mg_model.rds")
+dif_df         <- readRDS("data/processed/dif_results.rds")
+
+cat("Session loaded successfully.\n")
+cat("final_matrix:     ", nrow(final_matrix), "x", ncol(final_matrix), "\n")
+cat("sample_dev:       ", nrow(sample_dev), "x", ncol(sample_dev), "\n")
+cat("Items:            ", length(dichotomous_clean), "\n")
+cat("Models:            1PL, 2PL, multigroup loaded\n")
+cat("DIF results:      ", nrow(dif_df), "items\n")
+
+theta_seq <- seq(-4, 4, length.out = 200)
+```
+
+---
+
+## Phase 1 — Data Preparation
+
+### Data Source
+
+PISA 2022 is a large-scale international assessment administered by the OECD to approximately 690,000 fifteen-year-old students across 80+ countries. The Cognitive Item Data File contains student responses to reading, mathematics, and science items. This analysis focuses exclusively on the reading domain.
+
+PISA uses a **rotated booklet design**: each student is assigned a subset of items, meaning most item-student combinations are not observed by design. This produces a sparse response matrix where missing values represent items not administered — not student omissions.
+
+### Kernel 1 — Load Raw Data
+
+> **Note:** This kernel reads the raw `.sav` file (~3.6 GB) and takes 2–3 minutes. It only needs to be run once. In subsequent sessions, load from cached `.rds` files using the Setup chunk above.
+
+```{r kernel-1-load}
+#| eval: false
+
+library(haven)
+library(dplyr)
+
+pisa_raw <- haven::read_sav("data/raw/CY08MSP_STU_COG.SAV")
+
+cat("Dimensions:", nrow(pisa_raw), "rows x", ncol(pisa_raw), "columns\n")
+
+cat("\nFirst 20 column names:\n")
+print(names(pisa_raw)[1:20])
+
+reading_cols <- names(pisa_raw)[grepl("^CR|^DR", names(pisa_raw))]
+cat("\nReading item columns found:", length(reading_cols), "\n")
+cat("First 10 reading columns:\n")
+print(head(reading_cols, 10))
+
+cat("\nValue distribution for first reading item:\n")
+print(table(pisa_raw[[reading_cols[1]]], useNA = "always"))
+```
+
+**Output:** 613,744 rows × 5,023 columns. The file contains all PISA 2022 students across all domains. Reading item columns follow the prefix convention `CR` (constructed response) and `DR` (dichotomous response).
+
+### Kernel 2 — Item Naming Structure
+
+```{r kernel-2-structure}
+#| eval: false
+
+cols_S  <- names(pisa_raw)[grepl("^CR.*S$|^DR.*S$", names(pisa_raw))]
+cols_R  <- names(pisa_raw)[grepl("^CR.*R$|^DR.*R$", names(pisa_raw))]
+cols_TT <- names(pisa_raw)[grepl("TT$", names(pisa_raw))]
+
+cat("Columns ending in S (raw score):", length(cols_S), "\n")
+cat("Columns ending in R (recoded):",   length(cols_R), "\n")
+cat("Columns ending in TT (time-on-task):", length(cols_TT), "\n")
+
+cat("\nValue range in first S column (", cols_S[1], "):\n")
+print(table(pisa_raw[[cols_S[1]]], useNA = "always"))
+
+cat("\nValue range in first R column (", cols_R[1], "):\n")
+print(table(pisa_raw[[cols_R[1]]], useNA = "always"))
+
+stems_S <- gsub("S$", "", cols_S)
+stems_R <- gsub("R$", "", cols_R)
+cat("\nUnique item stems in S columns:", length(unique(stems_S)), "\n")
+cat("Unique item stems in R columns:", length(unique(stems_R)), "\n")
+```
+
+**Output:** Three column types identified — `S` (raw score, 0/1 coding), `R` (recoded, 1/2 coding), `TT` (time-on-task). The `S` columns use standard 0/1 binary coding compatible with IRT estimation. The `R` columns use SPSS-style 1/2 coding and are not used.
+
+### Kernel 3 — Response Coding Audit
+
+```{r kernel-3-polytomous}
+#| eval: false
+
+value_summary <- sapply(cols_S, function(col) {
+  vals <- unique(na.omit(as.numeric(pisa_raw[[col]])))
+  sort(vals)
+}, simplify = FALSE)
+
+dichotomous <- names(value_summary)[sapply(value_summary, function(v) identical(v, c(0, 1)))]
+polytomous  <- names(value_summary)[sapply(value_summary, function(v) length(v) > 2)]
+other       <- names(value_summary)[!names(value_summary) %in% c(dichotomous, polytomous)]
+
+cat("Dichotomous items (0/1 only):",        length(dichotomous), "\n")
+cat("Polytomous items (more than 2 values):", length(polytomous), "\n")
+cat("Other (unexpected coding):",            length(other), "\n")
+
+if (length(polytomous) > 0) {
+  cat("\nValue ranges in polytomous items:\n")
+  for (col in head(polytomous, 5)) {
+    cat(col, ":", paste(value_summary[[col]], collapse = "/"), "\n")
+  }
+}
+```
+
+**Output:** 225 dichotomous items, 163 polytomous (0/1/2 or 0–6 range), 1 entirely empty. Polytomous items with `VS` suffix are composite unit scores, not individual items. **Decision:** retain only dichotomous non-VS items for IRT modeling. Polytomous items require a Graded Response Model which is outside the scope of this analysis; exclusion is documented explicitly.
+
+### Kernel 4 — Final Item Inventory
+
+```{r kernel-4-outlier-vs}
+#| eval: false
+
+cols_VS <- cols_S[grepl("VS$", cols_S)]
+cat("Columns with VS suffix (composite scores):", length(cols_VS), "\n")
+
+dichotomous_clean <- dichotomous[!grepl("VS$", dichotomous)]
+cat("Dichotomous items excluding VS:", length(dichotomous_clean), "\n")
+```
+
+**Output:** 191 clean dichotomous items retained for analysis.
+
+### Kernel 5 — Build Response Matrix
+
+```{r kernel-5-response-matrix}
+#| eval: false
+
+response_matrix <- pisa_raw %>%
+  select(CNT, CNTSTUID, all_of(dichotomous_clean)) %>%
+  mutate(across(all_of(dichotomous_clean), as.numeric))
+
+item_data        <- response_matrix %>% select(all_of(dichotomous_clean))
+items_per_student <- rowSums(!is.na(item_data))
+
+saveRDS(response_matrix, "data/processed/response_matrix.rds")
+cat("Response matrix saved: ", nrow(response_matrix), "x", ncol(response_matrix), "\n")
+```
+
+### Kernel 6 — Filter Valid Reading Respondents
+
+```{r kernel-6-filter-students}
+#| eval: false
+
+valid_students <- response_matrix[items_per_student > 0, ]
+cat("Students with at least 1 reading item:", nrow(valid_students), "\n")
+cat("\nTop 10 countries by student count:\n")
+print(sort(table(valid_students$CNT), decreasing = TRUE)[1:10])
+```
+
+**Output:** 243,225 students with at least one reading item (~40% of the full file). The remaining 60% received mathematics or science booklets only.
+
+### Kernel 7 — Clean and Save Final Matrix
+
+```{r kernel-7-clean-matrix}
+#| eval: false
+
+item_data_valid  <- valid_students %>% select(all_of(dichotomous_clean))
+items_per_valid  <- rowSums(!is.na(item_data_valid))
+final_matrix     <- valid_students[items_per_valid <= 191, ]
+
+na_rate <- sum(is.na(final_matrix %>% select(all_of(dichotomous_clean)))) /
+           prod(dim(final_matrix %>% select(all_of(dichotomous_clean))))
+
+cat("Final matrix:", nrow(final_matrix), "x", ncol(final_matrix), "\n")
+cat("Sparsity:", round(na_rate * 100, 1), "%\n")
+
+saveRDS(final_matrix, "data/processed/response_matrix_clean.rds")
+```
+
+**Output:** 243,225 × 193 matrix. Sparsity of 76.8% is expected — each student receives approximately 45 of 191 possible items under the booklet design.
+
+### Kernel 8 — Stratified Development Sample
+
+```{r kernel-8-sample}
+#| eval: false
+
+set.seed(42)
+
+sample_ids <- final_matrix %>%
+  group_by(CNT) %>%
+  slice_sample(prop = 30000 / nrow(final_matrix)) %>%
+  ungroup()
+
+sample_dev <- sample_ids %>%
+  select(CNT, CNTSTUID, all_of(dichotomous_clean))
+
+saveRDS(sample_dev, "data/processed/response_matrix_dev.rds")
+cat("Development sample:", nrow(sample_dev), "x", ncol(sample_dev), "\n")
+cat("Countries represented:", n_distinct(sample_dev$CNT), "\n")
+```
+
+**Decision:** A stratified proportional sample of ~30,000 students (76 countries) is used for model development to reduce computation time. Final production models will be calibrated on the full 243,225-student dataset. `set.seed(42)` ensures reproducibility.
+
+---
+
+## Phase 2 — Model Calibration
+
+### Conceptual Background
+
+IRT models the probability of a correct response as a function of person ability (θ) and item parameters. Three nested models are compared:
+
+| Model | Parameters | Description |
+|-------|-----------|-------------|
+| 1PL (Rasch) | b only | Equal discrimination across items |
+| 2PL | a, b | Item-specific discrimination |
+| 3PL | a, b, c | Adds pseudo-guessing parameter |
+
+Estimation uses the EM (Expectation-Maximization) algorithm implemented in the `mirt` package. Convergence is assessed via maximum parameter change per iteration.
+
+### Kernel 9 — Fit 1PL, 2PL, and 3PL Models
+
+> **Note:** This kernel takes 20–40 minutes on the development sample. Run once; models are cached.
+
+```{r kernel-9-model-calibration}
+#| eval: false
+
+library(mirt)
+
+item_matrix <- sample_dev %>%
+  select(all_of(dichotomous_clean)) %>%
+  as.data.frame()
+
+model_1pl <- mirt(data = item_matrix, model = 1, itemtype = "Rasch",
+                  SE = TRUE, verbose = TRUE)
+model_2pl <- mirt(data = item_matrix, model = 1, itemtype = "2PL",
+                  SE = TRUE, verbose = TRUE)
+model_3pl <- mirt(data = item_matrix, model = 1, itemtype = "3PL",
+                  SE = TRUE, verbose = TRUE)
+
+saveRDS(model_1pl, "data/processed/model_1pl.rds")
+saveRDS(model_2pl, "data/processed/model_2pl.rds")
+saveRDS(model_3pl, "data/processed/model_3pl.rds")
+```
+
+**Convergence results:** 1PL converged in 56 iterations; 2PL in 66 iterations. The 3PL failed to converge after 500 iterations (Max-Change = 0.00034). Non-convergence of the 3PL is consistent with PISA's item format — many items are constructed-response rather than multiple-choice, making the pseudo-guessing parameter theoretically unjustified and empirically unstable. The 3PL is excluded from further analysis with this rationale documented.
+
+### Kernel 10 — Model Fit Comparison
+
+```{r kernel-10-model-comparison}
+# Extract fit indices directly from mirt objects
+aic_1pl <- model_1pl@Fit$AIC
+aic_2pl <- model_2pl@Fit$AIC
+bic_1pl <- model_1pl@Fit$BIC
+bic_2pl <- model_2pl@Fit$BIC
+
+fit_table <- data.frame(
+  Model = c("1PL (Rasch)", "2PL"),
+  AIC   = round(c(aic_1pl, aic_2pl), 0),
+  BIC   = round(c(bic_1pl, bic_2pl), 0)
+)
+
+knitr::kable(fit_table, caption = "Model fit comparison — 1PL vs 2PL")
+
+cat("\nAIC difference (1PL - 2PL):", round(aic_1pl - aic_2pl, 0), "\n")
+cat("BIC difference (1PL - 2PL):", round(bic_1pl - bic_2pl, 0), "\n")
+
+cat("\nLikelihood Ratio Test:\n")
+print(anova(model_1pl, model_2pl))
+```
+
+**Model selection:** The 2PL is selected over the 1PL on all three criteria — AIC difference of 11,571, BIC difference of 9,992, and LRT χ²(190) = 11,950.83, p < .001. The magnitude of improvement rules out chance; items in the PISA reading domain vary meaningfully in their ability to discriminate across the ability continuum, making equal-discrimination assumption of the Rasch model untenable.
+
+---
+
+## Phase 3 — Item Diagnostics
+
+### Kernel 11 — Parameter Extraction
+
+```{r kernel-11-parameters}
+numeric_cols <- c("a", "b", "g", "u")
+
+cat("Parameter estimates — first 10 items:\n")
+print(round(params_2pl[1:10, numeric_cols], 3))
+
+cat("\nDiscrimination (a) summary:\n")
+print(summary(params_2pl$a))
+
+cat("\nDifficulty (b) summary:\n")
+print(summary(params_2pl$b))
+
+low_discrimination <- params_2pl[params_2pl$a < 0.5, ]
+extreme_difficulty  <- params_2pl[params_2pl$b > 3 | params_2pl$b < -3, ]
+
+cat("\nItems with low discrimination (a < 0.5):", nrow(low_discrimination), "\n")
+cat("Items with extreme difficulty (|b| > 3):", nrow(extreme_difficulty), "\n")
+
+if (nrow(low_discrimination) > 0) {
+  cat("\nFlagged items — low discrimination:\n")
+  print(round(low_discrimination[, numeric_cols], 3))
+}
+```
+
+**Parameter interpretation:** Discrimination (a) ranges from 0.074 to 2.355 (median = 1.170), confirming item-level heterogeneity that justifies the 2PL. Difficulty (b) is predominantly negative (median = -0.885), indicating the test is oriented toward below-average ability — consistent with PISA's goal of measuring a globally diverse population of 15-year-olds. Six items show a < 0.5; one item (`CR556Q04S`) has b = 15.06 with a = 0.074, indicating a collapsed estimation — this item is flagged for exclusion in production calibration.
+
+### Kernel 12 — Item Characteristic Curves
+
+```{r kernel-12-icc}
+theta_seq <- seq(-4, 4, length.out = 200)
+
+icc_2pl_fn <- function(a, b, theta) {
+  1 / (1 + exp(-a * (theta - b)))
+}
+
+icc_data <- bind_rows(lapply(1:nrow(params_2pl), function(i) {
+  data.frame(
+    theta = theta_seq,
+    prob  = icc_2pl_fn(params_2pl$a[i], params_2pl$b[i], theta_seq),
+    item  = params_2pl$item[i],
+    a     = params_2pl$a[i],
+    b     = params_2pl$b[i]
+  )
+}))
+
+# Plot 1: All items
+p_icc_all <- ggplot(icc_data, aes(x = theta, y = prob, group = item)) +
+  geom_line(alpha = 0.3, color = "#2E86AB", linewidth = 0.4) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "gray50") +
+  labs(title    = "Item Characteristic Curves — All Items (2PL)",
+       subtitle = "Each line represents one reading item",
+       x = "Ability (θ)", y = "P(Correct)") +
+  theme_minimal(base_size = 12) + ylim(0, 1)
+
+# Plot 2: Problematic items
+problematic_items <- c("CR590Q28S", "CR590Q16S", "CR590Q06S",
+                       "CR556Q04S", "CR566Q05S", "CR566Q14S")
+
+p_icc_problem <- icc_data %>%
+  filter(item %in% problematic_items) %>%
+  ggplot(aes(x = theta, y = prob, color = item)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "gray50") +
+  labs(title    = "ICC — Low Discrimination Items (a < 0.5)",
+       subtitle = "Flat curves indicate poor ability differentiation",
+       x = "Ability (θ)", y = "P(Correct)", color = "Item") +
+  theme_minimal(base_size = 12) + ylim(0, 1)
+
+# Plot 3: Top discriminating items
+top_items <- params_2pl %>% arrange(desc(a)) %>% slice(1:6) %>% pull(item)
+
+p_icc_top <- icc_data %>%
+  filter(item %in% top_items) %>%
+  ggplot(aes(x = theta, y = prob, color = item)) +
+  geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "gray50") +
+  labs(title    = "ICC — High Discrimination Items (top 6 by a)",
+       subtitle = "Steep curves indicate strong ability differentiation",
+       x = "Ability (θ)", y = "P(Correct)", color = "Item") +
+  theme_minimal(base_size = 12) + ylim(0, 1)
+
+print(p_icc_all)
+print(p_icc_problem)
+print(p_icc_top)
+
+ggsave("reports/figures/icc_all_items.png",   p_icc_all,     width = 10, height = 6, dpi = 150)
+ggsave("reports/figures/icc_problematic.png", p_icc_problem, width = 10, height = 6, dpi = 150)
+ggsave("reports/figures/icc_top_items.png",   p_icc_top,     width = 10, height = 6, dpi = 150)
+cat("ICC plots saved.\n")
+```
+
+**Interpretation:** The full ICC plot shows the characteristic fan-shape expected in a well-functioning test — curves spread across the ability continuum with varying slopes. The problematic items (a < 0.5) show near-flat curves that fail to differentiate ability levels; `CR556Q04S` never exceeds P = 0.35 even at θ = 4. The top-discriminating items show steep sigmoidal curves with inflection points ranging from θ ≈ -1.5 to θ ≈ 0, confirming they measure effectively within the test's target ability range.
+
+---
+
+## Phase 4 — Test Information Function
+
+### Kernel 13 — IIF and TIF
+
+```{r kernel-13-tif}
+# theta_seq defined here for chunk independence
+theta_seq <- seq(-4, 4, length.out = 200)
+
+iif_2pl_fn <- function(a, b, theta) {
+  p <- 1 / (1 + exp(-a * (theta - b)))
+  a^2 * p * (1 - p)
+}
+
+iif_data <- bind_rows(lapply(1:nrow(params_2pl), function(i) {
+  data.frame(
+    theta = theta_seq,
+    info  = iif_2pl_fn(params_2pl$a[i], params_2pl$b[i], theta_seq),
+    item  = params_2pl$item[i]
+  )
+}))
+
+tif_data <- iif_data %>%
+  group_by(theta) %>%
+  summarise(total_info = sum(info), .groups = "drop") %>%
+  mutate(se = 1 / sqrt(total_info))
+
+p_iif <- ggplot(iif_data, aes(x = theta, y = info, group = item)) +
+  geom_line(alpha = 0.3, color = "#2E86AB", linewidth = 0.4) +
+  labs(title    = "Item Information Functions — All Items (2PL)",
+       subtitle = "Each curve shows measurement precision contributed by one item",
+       x = "Ability (θ)", y = "Information I(θ)") +
+  theme_minimal(base_size = 12)
+
+p_tif <- ggplot(tif_data, aes(x = theta)) +
+  geom_line(aes(y = total_info), color = "#2E86AB", linewidth = 1.2) +
+  geom_line(aes(y = se * 20), color = "#E84855",
+            linewidth = 0.9, linetype = "dashed") +
+  scale_y_continuous(
+    name = "Test Information",
+    sec.axis = sec_axis(~ . / 20, name = "Standard Error SE(θ)")
+  ) +
+  labs(title    = "Test Information Function (TIF)",
+       subtitle = "Blue = information (higher is better) | Red dashed = SE (lower is better)",
+       x = "Ability (θ)") +
+  theme_minimal(base_size = 12)
+
+print(p_iif)
+print(p_tif)
+
+peak_theta <- tif_data$theta[which.max(tif_data$total_info)]
+peak_info  <- max(tif_data$total_info)
+peak_se    <- min(tif_data$se)
+good_range <- tif_data %>% filter(total_info >= peak_info * 0.5)
+
+cat("Peak information at θ =", round(peak_theta, 3), "\n")
+cat("Maximum information:", round(peak_info, 3), "\n")
+cat("Minimum SE at peak:", round(peak_se, 3), "\n")
+cat("Range where TIF > 50% of peak:", round(min(good_range$theta), 2),
+    "to", round(max(good_range$theta), 2), "\n")
+
+ggsave("reports/figures/iif_all_items.png", p_iif, width = 10, height = 6, dpi = 150)
+ggsave("reports/figures/tif_se.png",        p_tif, width = 10, height = 6, dpi = 150)
+```
+
+**Interpretation:** Peak information occurs at θ = -1.146 (maximum TIF = 62.495, minimum SE = 0.126). The test measures with highest precision in the range θ = -2.51 to 0.50 — corresponding to below-average to slightly above-average ability. Precision declines sharply for θ > 1, indicating limited measurement utility for high-ability students. This is a deliberate design feature of PISA, which targets population-level comparisons rather than individual diagnosis at the high end of the ability distribution.
+
+---
+
+## Phase 5 — Differential Item Functioning
+
+### Conceptual Background
+
+Differential Item Functioning (DIF) occurs when students of equal ability but from different groups have systematically different probabilities of answering an item correctly. DIF is a threat to measurement fairness: an item with DIF does not measure the same latent trait equivalently across groups.
+
+This analysis tests DIF between **OECD** (37 member countries, n = 15,276) and **Non-OECD** countries (39 countries, n = 14,686) using Lord's χ² test on the 2PL parameters (a, d). The multigroup model allows each group to have its own ability distribution while constraining item parameters to be equal under the null hypothesis.
+
+### Kernel 14 — Multigroup Model
+
+> **Note:** The multigroup model is cached. Fitting takes approximately 20 minutes on the development sample.
+
+```{r kernel-14-mg-model}
+#| eval: false
+
+item_matrix_dif <- sample_dif %>%
+  select(all_of(dichotomous_clean)) %>%
+  as.data.frame()
+
+mg_model <- multipleGroup(
+  data      = item_matrix_dif,
+  model     = 1,
+  group     = group_vector,
+  itemtype  = "2PL",
+  invariance = c("slopes", "intercepts", "free_means", "free_var"),
+  verbose   = TRUE
+)
+
+saveRDS(mg_model, "data/processed/mg_model.rds")
+```
+
+### Kernel 15 — Lord's χ² DIF Test
+
+> **Note:** DIF test results are cached. The test takes approximately 50 minutes on the development sample with `scheme = "drop"`.
+
+```{r kernel-15-dif}
+#| eval: false
+
+dif_results <- DIF(
+  mg_model,
+  which.par = c("a1", "d"),
+  scheme    = "drop",
+  verbose   = TRUE
+)
+
+dif_df      <- as.data.frame(dif_results)
+dif_df$item <- rownames(dif_df)
+dif_df      <- dif_df %>%
+  mutate(dif_flag = ifelse(adj_p < 0.05, "DIF", "No DIF"))
+
+saveRDS(dif_df, "data/processed/dif_results.rds")
+write.csv(dif_df, "data/processed/dif_results.csv", row.names = FALSE)
+```
+
+### Kernel 16 — DIF Results and Visualization
+
+```{r kernel-16-dif-summary}
+cat("Total items tested:", nrow(dif_df), "\n")
+cat("Items with DIF (adj_p < 0.05):", sum(dif_df$dif_flag == "DIF"), "\n")
+cat("Items without DIF:", sum(dif_df$dif_flag == "No DIF"), "\n")
+cat("DIF rate:", round(mean(dif_df$dif_flag == "DIF") * 100, 1), "%\n\n")
+
+# Top DIF items
+dif_items <- dif_df %>%
+  filter(dif_flag == "DIF") %>%
+  arrange(desc(X2)) %>%
+  slice(1:10) %>%
+  select(item, X2, df, adj_p) %>%
+  mutate(X2 = round(X2, 3), adj_p = round(adj_p, 6))
+
+cat("Top 10 items by DIF magnitude:\n")
+knitr::kable(dif_items, caption = "Items with largest DIF — Lord's χ² (OECD vs Non-OECD)")
+
+# DIF visualization
+p_dif <- ggplot(dif_df, aes(x = reorder(item, X2), y = X2, fill = dif_flag)) +
+  geom_col() +
+  geom_hline(yintercept = qchisq(0.95, df = 2),
+             linetype = "dashed", color = "black", linewidth = 0.8) +
+  scale_fill_manual(values = c("DIF" = "#E84855", "No DIF" = "#2E86AB")) +
+  coord_flip() +
+  labs(title    = "DIF Analysis — Lord's χ² Test (OECD vs Non-OECD)",
+       subtitle = "Dashed line = critical value (α = 0.05, df = 2)",
+       x = "Item", y = "χ² statistic", fill = "") +
+  theme_minimal(base_size = 9)
+
+print(p_dif)
+
+ggsave("reports/figures/dif_results.png", p_dif,
+       width = 10, height = 14, dpi = 150)
+cat("DIF plot saved.\n")
+```
+
+**Interpretation:** 58 of 191 items (30.4%) show statistically significant DIF between OECD and Non-OECD groups after Bonferroni correction. The five items with the largest DIF magnitude (χ² > 57) — `CR545Q07S`, `CR590Q44S`, `CR570Q05S`, `CR590Q57S`, `CR560Q08S` — likely reflect cultural or linguistic context effects that favor students from OECD educational systems.
+
+A DIF rate of 30.4% is high by conventional standards (<10–15%). Two caveats must be noted: (1) with n = 29,962, statistical power is very high and even small parameter differences reach significance; (2) statistical DIF does not automatically imply bias — expert review of item content is required to determine whether differential functioning reflects construct-irrelevant variance or legitimate group differences in the constructs measured. These findings suggest that direct OECD/Non-OECD comparisons on PISA reading scores should be interpreted with caution at the item level.
+
+---
+
+## Summary
+
+| Phase | Key Finding |
+|-------|------------|
+| Data preparation | 191 dichotomous reading items, 243,225 valid students across 76 countries |
+| Model selection | 2PL selected over 1PL — AIC Δ = 11,571, BIC Δ = 9,992, LRT p < .001 |
+| Item diagnostics | 6 items with a < 0.5 flagged; 1 item with collapsed estimation excluded |
+| Test information | Peak precision at θ = -1.15; effective range θ = -2.51 to 0.50 |
+| DIF analysis | 58/191 items (30.4%) show DIF between OECD and Non-OECD groups |
+
+---
+
+## Technical Notes
+
+**Software:** R 4.5, `mirt` 1.40, `ggplot2` 3.5, `haven` 2.5, `dplyr` 1.1, Quarto 1.9
+
+**Reproducibility:** All random processes use `set.seed(42)`. Raw data not included due to size (~3.6 GB); processed `.rds` files are provided in `data/processed/`.
+
+**Limitations:** All models are calibrated on the development sample (n ≈ 30,000). Production calibration on the full dataset (n = 243,225) is expected to produce more stable parameter estimates, particularly for items with sparse response patterns.

@@ -1,12 +1,9 @@
-# History files
+# History and session files
 .Rhistory
 .Rapp.history
 
-# Session Data files
 .RData
-.RDataTmp
-
-# User-specific files
+.RDataTmp*
 .Ruserdata
 
 # Example code in package build process
@@ -20,6 +17,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -39,9 +37,6 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-# pkgdown site
-docs/
-
 # translation temp files
 po/*~
 
@@ -49,13 +44,9 @@ po/*~
 rsconnect/
 
 # Large data files — download instructions in README
-data/raw/*.sav
-data/raw/*.zip
-data/raw/*.gz
-data/processed/*.rds
-data/processed/*.csv
+data/raw/
+data/processed/
 
-# R environment
-.Rproj.user/
-.Rhistory
-*.Rproj
+# Local IDE / assistant state
+.positai
+.vscode/
