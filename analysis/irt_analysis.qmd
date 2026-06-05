@@ -611,6 +611,6 @@ A DIF rate of 30.4% is high by conventional standards (<10–15%). Two caveats m
 
 **Software:** R 4.5, `mirt` 1.40, `ggplot2` 3.5, `haven` 2.5, `dplyr` 1.1, Quarto 1.9
 
-**Reproducibility:** All random processes use `set.seed(42)`. Raw data not included due to size (~3.6 GB); processed `.rds` files are provided in `data/processed/`.
+**Reproducibility:** All random processes use `set.seed(42)`. Raw data is not included due to size and redistribution constraints. Processed `.rds` files are generated locally in `data/processed/` and are not tracked by Git.
 
 **Limitations:** All models are calibrated on the development sample (n ≈ 30,000). Production calibration on the full dataset (n = 243,225) is expected to produce more stable parameter estimates, particularly for items with sparse response patterns.

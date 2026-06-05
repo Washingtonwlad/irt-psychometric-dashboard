@@ -13,10 +13,10 @@ find_project_root <- function(start = getwd()) {
 
   for (path in candidates) {
     has_readme <- file.exists(file.path(path, "README.md"))
-    has_data <- dir.exists(file.path(path, "data"))
     has_src <- dir.exists(file.path(path, "src"))
+    has_app <- dir.exists(file.path(path, "app"))
 
-    if (has_readme && has_data && has_src) {
+    if (has_readme && has_src && has_app) {
       return(path)
     }
   }

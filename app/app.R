@@ -34,6 +34,9 @@ params_2pl <- extract_2pl_parameters(model_2pl, dif_df)
 item_names  <- params_2pl$item
 theta_seq   <- seq(-4, 4, length.out = 300)
 tif_data    <- build_tif_data(params_2pl, theta_seq)
+dif_count   <- sum(dif_df$dif_flag == "DIF", na.rm = TRUE)
+item_count  <- nrow(dif_df)
+dif_rate    <- mean(dif_df$dif_flag == "DIF", na.rm = TRUE) * 100
 
 # -----------------------------------------------------------------------------
 # UI
@@ -162,8 +165,12 @@ ui <- navbarPage(
       fluidRow(
         column(12,
           h3("Differential Item Functioning — OECD vs Non-OECD"),
-          p("Lord's χ² test on 2PL parameters (a, d). Adjusted p-values use Bonferroni correction.
-            58 of 191 items (30.4%) show significant DIF at α = 0.05.")
+          p(sprintf(
+            "Lord's χ² test on 2PL parameters (a, d). Adjusted p-values use Bonferroni correction. %s of %s items (%.1f%%) show significant DIF at α = 0.05.",
+            dif_count,
+            item_count,
+            dif_rate
+          ))
         )
       ),
       br(),
