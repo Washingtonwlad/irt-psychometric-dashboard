@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Washington Casamen Nolasco">
-<meta name="dcterms.date" content="2026-05-20">
+<meta name="dcterms.date" content="2026-06-05">
 
-<title>IRT Psychometric Analysis â€” PISA 2022</title>
+<title>IRT Psychometric Analysis - PISA 2022</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -88,39 +88,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#session-setup" id="toc-session-setup" class="nav-link" data-scroll-target="#session-setup">Session Setup</a></li>
-  <li><a href="#phase-1-data-preparation" id="toc-phase-1-data-preparation" class="nav-link" data-scroll-target="#phase-1-data-preparation">Phase 1 â€” Data Preparation</a>
+  <li><a href="#phase-1---data-preparation" id="toc-phase-1---data-preparation" class="nav-link" data-scroll-target="#phase-1---data-preparation">Phase 1 - Data Preparation</a>
   <ul class="collapse">
   <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data Source</a></li>
-  <li><a href="#kernel-1-load-raw-data" id="toc-kernel-1-load-raw-data" class="nav-link" data-scroll-target="#kernel-1-load-raw-data">Kernel 1 â€” Load Raw Data</a></li>
-  <li><a href="#kernel-2-item-naming-structure" id="toc-kernel-2-item-naming-structure" class="nav-link" data-scroll-target="#kernel-2-item-naming-structure">Kernel 2 â€” Item Naming Structure</a></li>
-  <li><a href="#kernel-3-response-coding-audit" id="toc-kernel-3-response-coding-audit" class="nav-link" data-scroll-target="#kernel-3-response-coding-audit">Kernel 3 â€” Response Coding Audit</a></li>
-  <li><a href="#kernel-4-final-item-inventory" id="toc-kernel-4-final-item-inventory" class="nav-link" data-scroll-target="#kernel-4-final-item-inventory">Kernel 4 â€” Final Item Inventory</a></li>
-  <li><a href="#kernel-5-build-response-matrix" id="toc-kernel-5-build-response-matrix" class="nav-link" data-scroll-target="#kernel-5-build-response-matrix">Kernel 5 â€” Build Response Matrix</a></li>
-  <li><a href="#kernel-6-filter-valid-reading-respondents" id="toc-kernel-6-filter-valid-reading-respondents" class="nav-link" data-scroll-target="#kernel-6-filter-valid-reading-respondents">Kernel 6 â€” Filter Valid Reading Respondents</a></li>
-  <li><a href="#kernel-7-clean-and-save-final-matrix" id="toc-kernel-7-clean-and-save-final-matrix" class="nav-link" data-scroll-target="#kernel-7-clean-and-save-final-matrix">Kernel 7 â€” Clean and Save Final Matrix</a></li>
-  <li><a href="#kernel-8-stratified-development-sample" id="toc-kernel-8-stratified-development-sample" class="nav-link" data-scroll-target="#kernel-8-stratified-development-sample">Kernel 8 â€” Stratified Development Sample</a></li>
+  <li><a href="#kernel-1---load-raw-data" id="toc-kernel-1---load-raw-data" class="nav-link" data-scroll-target="#kernel-1---load-raw-data">Kernel 1 - Load Raw Data</a></li>
+  <li><a href="#kernel-2---item-naming-structure" id="toc-kernel-2---item-naming-structure" class="nav-link" data-scroll-target="#kernel-2---item-naming-structure">Kernel 2 - Item Naming Structure</a></li>
+  <li><a href="#kernel-3---response-coding-audit" id="toc-kernel-3---response-coding-audit" class="nav-link" data-scroll-target="#kernel-3---response-coding-audit">Kernel 3 - Response Coding Audit</a></li>
+  <li><a href="#kernel-4---final-item-inventory" id="toc-kernel-4---final-item-inventory" class="nav-link" data-scroll-target="#kernel-4---final-item-inventory">Kernel 4 - Final Item Inventory</a></li>
+  <li><a href="#kernel-5---build-response-matrix" id="toc-kernel-5---build-response-matrix" class="nav-link" data-scroll-target="#kernel-5---build-response-matrix">Kernel 5 - Build Response Matrix</a></li>
+  <li><a href="#kernel-6---filter-valid-reading-respondents" id="toc-kernel-6---filter-valid-reading-respondents" class="nav-link" data-scroll-target="#kernel-6---filter-valid-reading-respondents">Kernel 6 - Filter Valid Reading Respondents</a></li>
+  <li><a href="#kernel-7---clean-and-save-final-matrix" id="toc-kernel-7---clean-and-save-final-matrix" class="nav-link" data-scroll-target="#kernel-7---clean-and-save-final-matrix">Kernel 7 - Clean and Save Final Matrix</a></li>
+  <li><a href="#kernel-8---stratified-development-sample" id="toc-kernel-8---stratified-development-sample" class="nav-link" data-scroll-target="#kernel-8---stratified-development-sample">Kernel 8 - Stratified Development Sample</a></li>
   </ul></li>
-  <li><a href="#phase-2-model-calibration" id="toc-phase-2-model-calibration" class="nav-link" data-scroll-target="#phase-2-model-calibration">Phase 2 â€” Model Calibration</a>
+  <li><a href="#phase-2---model-calibration" id="toc-phase-2---model-calibration" class="nav-link" data-scroll-target="#phase-2---model-calibration">Phase 2 - Model Calibration</a>
   <ul class="collapse">
   <li><a href="#conceptual-background" id="toc-conceptual-background" class="nav-link" data-scroll-target="#conceptual-background">Conceptual Background</a></li>
-  <li><a href="#kernel-9-fit-1pl-2pl-and-3pl-models" id="toc-kernel-9-fit-1pl-2pl-and-3pl-models" class="nav-link" data-scroll-target="#kernel-9-fit-1pl-2pl-and-3pl-models">Kernel 9 â€” Fit 1PL, 2PL, and 3PL Models</a></li>
-  <li><a href="#kernel-10-model-fit-comparison" id="toc-kernel-10-model-fit-comparison" class="nav-link" data-scroll-target="#kernel-10-model-fit-comparison">Kernel 10 â€” Model Fit Comparison</a></li>
+  <li><a href="#kernel-9---fit-1pl-2pl-and-3pl-models" id="toc-kernel-9---fit-1pl-2pl-and-3pl-models" class="nav-link" data-scroll-target="#kernel-9---fit-1pl-2pl-and-3pl-models">Kernel 9 - Fit 1PL, 2PL, and 3PL Models</a></li>
+  <li><a href="#kernel-10---model-fit-comparison" id="toc-kernel-10---model-fit-comparison" class="nav-link" data-scroll-target="#kernel-10---model-fit-comparison">Kernel 10 - Model Fit Comparison</a></li>
   </ul></li>
-  <li><a href="#phase-3-item-diagnostics" id="toc-phase-3-item-diagnostics" class="nav-link" data-scroll-target="#phase-3-item-diagnostics">Phase 3 â€” Item Diagnostics</a>
+  <li><a href="#phase-3---item-diagnostics" id="toc-phase-3---item-diagnostics" class="nav-link" data-scroll-target="#phase-3---item-diagnostics">Phase 3 - Item Diagnostics</a>
   <ul class="collapse">
-  <li><a href="#kernel-11-parameter-extraction" id="toc-kernel-11-parameter-extraction" class="nav-link" data-scroll-target="#kernel-11-parameter-extraction">Kernel 11 â€” Parameter Extraction</a></li>
-  <li><a href="#kernel-12-item-characteristic-curves" id="toc-kernel-12-item-characteristic-curves" class="nav-link" data-scroll-target="#kernel-12-item-characteristic-curves">Kernel 12 â€” Item Characteristic Curves</a></li>
+  <li><a href="#kernel-11---parameter-extraction" id="toc-kernel-11---parameter-extraction" class="nav-link" data-scroll-target="#kernel-11---parameter-extraction">Kernel 11 - Parameter Extraction</a></li>
+  <li><a href="#kernel-12---item-characteristic-curves" id="toc-kernel-12---item-characteristic-curves" class="nav-link" data-scroll-target="#kernel-12---item-characteristic-curves">Kernel 12 - Item Characteristic Curves</a></li>
   </ul></li>
-  <li><a href="#phase-4-test-information-function" id="toc-phase-4-test-information-function" class="nav-link" data-scroll-target="#phase-4-test-information-function">Phase 4 â€” Test Information Function</a>
+  <li><a href="#phase-4---test-information-function" id="toc-phase-4---test-information-function" class="nav-link" data-scroll-target="#phase-4---test-information-function">Phase 4 - Test Information Function</a>
   <ul class="collapse">
-  <li><a href="#kernel-13-iif-and-tif" id="toc-kernel-13-iif-and-tif" class="nav-link" data-scroll-target="#kernel-13-iif-and-tif">Kernel 13 â€” IIF and TIF</a></li>
+  <li><a href="#kernel-13---iif-and-tif" id="toc-kernel-13---iif-and-tif" class="nav-link" data-scroll-target="#kernel-13---iif-and-tif">Kernel 13 - IIF and TIF</a></li>
   </ul></li>
-  <li><a href="#phase-5-differential-item-functioning" id="toc-phase-5-differential-item-functioning" class="nav-link" data-scroll-target="#phase-5-differential-item-functioning">Phase 5 â€” Differential Item Functioning</a>
+  <li><a href="#phase-5---differential-item-functioning" id="toc-phase-5---differential-item-functioning" class="nav-link" data-scroll-target="#phase-5---differential-item-functioning">Phase 5 - Differential Item Functioning</a>
   <ul class="collapse">
   <li><a href="#conceptual-background-1" id="toc-conceptual-background-1" class="nav-link" data-scroll-target="#conceptual-background-1">Conceptual Background</a></li>
-  <li><a href="#kernel-14-multigroup-model" id="toc-kernel-14-multigroup-model" class="nav-link" data-scroll-target="#kernel-14-multigroup-model">Kernel 14 â€” Multigroup Model</a></li>
-  <li><a href="#kernel-15-lords-Ï‡Â²-dif-test" id="toc-kernel-15-lords-Ï‡Â²-dif-test" class="nav-link" data-scroll-target="#kernel-15-lords-Ï‡Â²-dif-test">Kernel 15 â€” Lordâ€™s Ï‡Â² DIF Test</a></li>
-  <li><a href="#kernel-16-dif-results-and-visualization" id="toc-kernel-16-dif-results-and-visualization" class="nav-link" data-scroll-target="#kernel-16-dif-results-and-visualization">Kernel 16 â€” DIF Results and Visualization</a></li>
+  <li><a href="#kernel-14---multigroup-model" id="toc-kernel-14---multigroup-model" class="nav-link" data-scroll-target="#kernel-14---multigroup-model">Kernel 14 - Multigroup Model</a></li>
+  <li><a href="#kernel-15---lords-chi-square-dif-test" id="toc-kernel-15---lords-chi-square-dif-test" class="nav-link" data-scroll-target="#kernel-15---lords-chi-square-dif-test">Kernel 15 - Lord’s chi-square DIF Test</a></li>
+  <li><a href="#kernel-16---dif-results-and-visualization" id="toc-kernel-16---dif-results-and-visualization" class="nav-link" data-scroll-target="#kernel-16---dif-results-and-visualization">Kernel 16 - DIF Results and Visualization</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   <li><a href="#technical-notes" id="toc-technical-notes" class="nav-link" data-scroll-target="#technical-notes">Technical Notes</a></li>
@@ -131,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">IRT Psychometric Analysis â€” PISA 2022</h1>
+<h1 class="title">IRT Psychometric Analysis - PISA 2022</h1>
 </div>
 
 
@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 20, 2026</p>
+      <p class="date">June 5, 2026</p>
     </div>
   </div>
   
@@ -174,7 +174,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SESSION RELOAD â€” run this chunk first in every new session</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SESSION RELOAD - run this chunk first in every new session</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># All heavy computations are cached as .rds files in data/processed/</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
@@ -257,17 +257,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <hr>
 </section>
-<section id="phase-1-data-preparation" class="level2">
-<h2 class="anchored" data-anchor-id="phase-1-data-preparation">Phase 1 â€” Data Preparation</h2>
+<section id="phase-1---data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="phase-1---data-preparation">Phase 1 - Data Preparation</h2>
 <section id="data-source" class="level3">
 <h3 class="anchored" data-anchor-id="data-source">Data Source</h3>
 <p>PISA 2022 is a large-scale international assessment administered by the OECD to approximately 690,000 fifteen-year-old students across 80+ countries. The Cognitive Item Data File contains student responses to reading, mathematics, and science items. This analysis focuses exclusively on the reading domain.</p>
-<p>PISA uses a <strong>rotated booklet design</strong>: each student is assigned a subset of items, meaning most item-student combinations are not observed by design. This produces a sparse response matrix where missing values represent items not administered â€” not student omissions.</p>
+<p>PISA uses a <strong>rotated booklet design</strong>: each student is assigned a subset of items, meaning most item-student combinations are not observed by design. This produces a sparse response matrix where missing values represent items not administered - not student omissions.</p>
 </section>
-<section id="kernel-1-load-raw-data" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-1-load-raw-data">Kernel 1 â€” Load Raw Data</h3>
+<section id="kernel-1---load-raw-data" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-1---load-raw-data">Kernel 1 - Load Raw Data</h3>
 <blockquote class="blockquote">
-<p><strong>Note:</strong> This kernel reads the raw <code>.sav</code> file (~3.6 GB) and takes 2â€“3 minutes. It only needs to be run once. In subsequent sessions, load from cached <code>.rds</code> files using the Setup chunk above.</p>
+<p><strong>Note:</strong> This kernel reads the raw <code>.sav</code> file (~3.6 GB) and takes 2-3 minutes. It only needs to be run once. In subsequent sessions, load from cached <code>.rds</code> files using the Setup chunk above.</p>
 </blockquote>
 <div class="cell">
 <details class="code-fold">
@@ -291,10 +291,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">table</span>(pisa_raw[[reading_cols[<span class="dv">1</span>]]], <span class="at">useNA =</span> <span class="st">"always"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Output:</strong> 613,744 rows Ã— 5,023 columns. The file contains all PISA 2022 students across all domains. Reading item columns follow the prefix convention <code>CR</code> (constructed response) and <code>DR</code> (dichotomous response).</p>
+<p><strong>Output:</strong> 613,744 rows x 5,023 columns. The file contains all PISA 2022 students across all domains. Reading item columns follow the prefix convention <code>CR</code> (constructed response) and <code>DR</code> (dichotomous response).</p>
 </section>
-<section id="kernel-2-item-naming-structure" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-2-item-naming-structure">Kernel 2 â€” Item Naming Structure</h3>
+<section id="kernel-2---item-naming-structure" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-2---item-naming-structure">Kernel 2 - Item Naming Structure</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -318,10 +318,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Unique item stems in R columns:"</span>, <span class="fu">length</span>(<span class="fu">unique</span>(stems_R)), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Output:</strong> Three column types identified â€” <code>S</code> (raw score, 0/1 coding), <code>R</code> (recoded, 1/2 coding), <code>TT</code> (time-on-task). The <code>S</code> columns use standard 0/1 binary coding compatible with IRT estimation. The <code>R</code> columns use SPSS-style 1/2 coding and are not used.</p>
+<p><strong>Output:</strong> Three column types identified - <code>S</code> (raw score, 0/1 coding), <code>R</code> (recoded, 1/2 coding), <code>TT</code> (time-on-task). The <code>S</code> columns use standard 0/1 binary coding compatible with IRT estimation. The <code>R</code> columns use SPSS-style 1/2 coding and are not used.</p>
 </section>
-<section id="kernel-3-response-coding-audit" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-3-response-coding-audit">Kernel 3 â€” Response Coding Audit</h3>
+<section id="kernel-3---response-coding-audit" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-3---response-coding-audit">Kernel 3 - Response Coding Audit</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -346,10 +346,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Output:</strong> 225 dichotomous items, 163 polytomous (0/1/2 or 0â€“6 range), 1 entirely empty. Polytomous items with <code>VS</code> suffix are composite unit scores, not individual items. <strong>Decision:</strong> retain only dichotomous non-VS items for IRT modeling. Polytomous items require a Graded Response Model which is outside the scope of this analysis; exclusion is documented explicitly.</p>
+<p><strong>Output:</strong> 225 dichotomous items, 163 polytomous (0/1/2 or 0-6 range), 1 entirely empty. Polytomous items with <code>VS</code> suffix are composite unit scores, not individual items. <strong>Decision:</strong> retain only dichotomous non-VS items for IRT modeling. Polytomous items require a Graded Response Model which is outside the scope of this analysis; exclusion is documented explicitly.</p>
 </section>
-<section id="kernel-4-final-item-inventory" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-4-final-item-inventory">Kernel 4 â€” Final Item Inventory</h3>
+<section id="kernel-4---final-item-inventory" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-4---final-item-inventory">Kernel 4 - Final Item Inventory</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -362,8 +362,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Output:</strong> 191 clean dichotomous items retained for analysis.</p>
 </section>
-<section id="kernel-5-build-response-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-5-build-response-matrix">Kernel 5 â€” Build Response Matrix</h3>
+<section id="kernel-5---build-response-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-5---build-response-matrix">Kernel 5 - Build Response Matrix</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -379,8 +379,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="kernel-6-filter-valid-reading-respondents" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-6-filter-valid-reading-respondents">Kernel 6 â€” Filter Valid Reading Respondents</h3>
+<section id="kernel-6---filter-valid-reading-respondents" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-6---filter-valid-reading-respondents">Kernel 6 - Filter Valid Reading Respondents</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -392,8 +392,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Output:</strong> 243,225 students with at least one reading item (~40% of the full file). The remaining 60% received mathematics or science booklets only.</p>
 </section>
-<section id="kernel-7-clean-and-save-final-matrix" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-7-clean-and-save-final-matrix">Kernel 7 â€” Clean and Save Final Matrix</h3>
+<section id="kernel-7---clean-and-save-final-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-7---clean-and-save-final-matrix">Kernel 7 - Clean and Save Final Matrix</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -410,10 +410,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(final_matrix, <span class="st">"data/processed/response_matrix_clean.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Output:</strong> 243,225 Ã— 193 matrix. Sparsity of 76.8% is expected â€” each student receives approximately 45 of 191 possible items under the booklet design.</p>
+<p><strong>Output:</strong> 243,225 x 193 matrix. Sparsity of 76.8% is expected - each student receives approximately 45 of 191 possible items under the booklet design.</p>
 </section>
-<section id="kernel-8-stratified-development-sample" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-8-stratified-development-sample">Kernel 8 â€” Stratified Development Sample</h3>
+<section id="kernel-8---stratified-development-sample" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-8---stratified-development-sample">Kernel 8 - Stratified Development Sample</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -436,11 +436,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="phase-2-model-calibration" class="level2">
-<h2 class="anchored" data-anchor-id="phase-2-model-calibration">Phase 2 â€” Model Calibration</h2>
+<section id="phase-2---model-calibration" class="level2">
+<h2 class="anchored" data-anchor-id="phase-2---model-calibration">Phase 2 - Model Calibration</h2>
 <section id="conceptual-background" class="level3">
 <h3 class="anchored" data-anchor-id="conceptual-background">Conceptual Background</h3>
-<p>IRT models the probability of a correct response as a function of person ability (Î¸) and item parameters. Three nested models are compared:</p>
+<p>IRT models the probability of a correct response as a function of person ability (theta) and item parameters. Three nested models are compared:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -469,10 +469,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>Estimation uses the EM (Expectation-Maximization) algorithm implemented in the <code>mirt</code> package. Convergence is assessed via maximum parameter change per iteration.</p>
 </section>
-<section id="kernel-9-fit-1pl-2pl-and-3pl-models" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-9-fit-1pl-2pl-and-3pl-models">Kernel 9 â€” Fit 1PL, 2PL, and 3PL Models</h3>
+<section id="kernel-9---fit-1pl-2pl-and-3pl-models" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-9---fit-1pl-2pl-and-3pl-models">Kernel 9 - Fit 1PL, 2PL, and 3PL Models</h3>
 <blockquote class="blockquote">
-<p><strong>Note:</strong> This kernel takes 20â€“40 minutes on the development sample. Run once; models are cached.</p>
+<p><strong>Note:</strong> This kernel takes 20-40 minutes on the development sample. Run once; models are cached.</p>
 </blockquote>
 <div class="cell">
 <details class="code-fold">
@@ -495,10 +495,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(model_3pl, <span class="st">"data/processed/model_3pl.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Convergence results:</strong> 1PL converged in 56 iterations; 2PL in 66 iterations. The 3PL failed to converge after 500 iterations (Max-Change = 0.00034). Non-convergence of the 3PL is consistent with PISAâ€™s item format â€” many items are constructed-response rather than multiple-choice, making the pseudo-guessing parameter theoretically unjustified and empirically unstable. The 3PL is excluded from further analysis with this rationale documented.</p>
+<p><strong>Convergence results:</strong> 1PL converged in 56 iterations; 2PL in 66 iterations. The 3PL failed to converge after 500 iterations (Max-Change = 0.00034). Non-convergence of the 3PL is consistent with PISA’s item format - many items are constructed-response rather than multiple-choice, making the pseudo-guessing parameter theoretically unjustified and empirically unstable. The 3PL is excluded from further analysis with this rationale documented.</p>
 </section>
-<section id="kernel-10-model-fit-comparison" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-10-model-fit-comparison">Kernel 10 â€” Model Fit Comparison</h3>
+<section id="kernel-10---model-fit-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-10---model-fit-comparison">Kernel 10 - Model Fit Comparison</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -514,11 +514,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">BIC   =</span> <span class="fu">round</span>(<span class="fu">c</span>(bic_1pl, bic_2pl), <span class="dv">0</span>)</span>
 <span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(fit_table, <span class="at">caption =</span> <span class="st">"Model fit comparison â€” 1PL vs 2PL"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(fit_table, <span class="at">caption =</span> <span class="st">"Model fit comparison - 1PL vs 2PL"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Model fit comparison â€” 1PL vs 2PL</caption>
+<caption>Model fit comparison - 1PL vs 2PL</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Model</th>
@@ -573,23 +573,23 @@ model_1pl 1196821 1197806 1197333 1198416 -598218.5
 model_2pl 1185250 1187210 1186269 1188424 -592243.1 11950.827 190 0</code></pre>
 </div>
 </div>
-<p><strong>Model selection:</strong> The 2PL is selected over the 1PL on all three criteria â€” AIC difference of 11,571, BIC difference of 9,992, and LRT Ï‡Â²(190) = 11,950.83, p &lt; .001. The magnitude of improvement rules out chance; items in the PISA reading domain vary meaningfully in their ability to discriminate across the ability continuum, making equal-discrimination assumption of the Rasch model untenable.</p>
+<p><strong>Model selection:</strong> The 2PL is selected over the 1PL on all three criteria - AIC difference of 11,571, BIC difference of 9,992, and LRT chi-square(190) = 11,950.83, p &lt; .001. The magnitude of improvement rules out chance; items in the PISA reading domain vary meaningfully in their ability to discriminate across the ability continuum, making equal-discrimination assumption of the Rasch model untenable.</p>
 <hr>
 </section>
 </section>
-<section id="phase-3-item-diagnostics" class="level2">
-<h2 class="anchored" data-anchor-id="phase-3-item-diagnostics">Phase 3 â€” Item Diagnostics</h2>
-<section id="kernel-11-parameter-extraction" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-11-parameter-extraction">Kernel 11 â€” Parameter Extraction</h3>
+<section id="phase-3---item-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="phase-3---item-diagnostics">Phase 3 - Item Diagnostics</h2>
+<section id="kernel-11---parameter-extraction" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-11---parameter-extraction">Kernel 11 - Parameter Extraction</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>numeric_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"g"</span>, <span class="st">"u"</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Parameter estimates â€” first 10 items:</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Parameter estimates - first 10 items:</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Parameter estimates â€” first 10 items:</code></pre>
+<pre><code>Parameter estimates - first 10 items:</code></pre>
 </div>
 <details class="code-fold">
 <summary>Show code</summary>
@@ -661,13 +661,13 @@ Items with low discrimination (a &lt; 0.5): 6 </code></pre>
 <details class="code-fold">
 <summary>Show code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(low_discrimination) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Flagged items â€” low discrimination:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Flagged items - low discrimination:</span><span class="sc">\n</span><span class="st">"</span>)</span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">round</span>(low_discrimination[, numeric_cols], <span class="dv">3</span>))</span>
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Flagged items â€” low discrimination:
+Flagged items - low discrimination:
               a      b g u
 CR590Q28S 0.489 -3.618 0 1
 CR590Q16S 0.452 -3.350 0 1
@@ -677,10 +677,10 @@ CR566Q05S 0.393  0.880 0 1
 CR566Q14S 0.412  0.833 0 1</code></pre>
 </div>
 </div>
-<p><strong>Parameter interpretation:</strong> Discrimination (a) ranges from 0.074 to 2.355 (median = 1.170), confirming item-level heterogeneity that justifies the 2PL. Difficulty (b) is predominantly negative (median = -0.885), indicating the test is oriented toward below-average ability â€” consistent with PISAâ€™s goal of measuring a globally diverse population of 15-year-olds. Six items show a &lt; 0.5; one item (<code>CR556Q04S</code>) has b = 15.06 with a = 0.074, indicating a collapsed estimation â€” this item is flagged for exclusion in production calibration.</p>
+<p><strong>Parameter interpretation:</strong> Discrimination (a) ranges from 0.074 to 2.355 (median = 1.170), confirming item-level heterogeneity that justifies the 2PL. Difficulty (b) is predominantly negative (median = -0.885), indicating the test is oriented toward below-average ability - consistent with PISA’s goal of measuring a globally diverse population of 15-year-olds. Six items show a &lt; 0.5; one item (<code>CR556Q04S</code>) has b = 15.06 with a = 0.074, indicating a collapsed estimation - this item is flagged for exclusion in production calibration.</p>
 </section>
-<section id="kernel-12-item-characteristic-curves" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-12-item-characteristic-curves">Kernel 12 â€” Item Characteristic Curves</h3>
+<section id="kernel-12---item-characteristic-curves" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-12---item-characteristic-curves">Kernel 12 - Item Characteristic Curves</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -704,9 +704,9 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>p_icc_all <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(icc_data, <span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">y =</span> prob, <span class="at">group =</span> item)) <span class="sc">+</span></span>
 <span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">color =</span> <span class="st">"#2E86AB"</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"Item Characteristic Curves â€” All Items (2PL)"</span>,</span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"Item Characteristic Curves - All Items (2PL)"</span>,</span>
 <span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Each line represents one reading item"</span>,</span>
-<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (Î¸)"</span>, <span class="at">y =</span> <span class="st">"P(Correct)"</span>) <span class="sc">+</span></span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (theta)"</span>, <span class="at">y =</span> <span class="st">"P(Correct)"</span>) <span class="sc">+</span></span>
 <span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 2: Problematic items</span></span>
@@ -718,9 +718,9 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">y =</span> prob, <span class="at">color =</span> item)) <span class="sc">+</span></span>
 <span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
 <span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"ICC â€” Low Discrimination Items (a &lt; 0.5)"</span>,</span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"ICC - Low Discrimination Items (a &lt; 0.5)"</span>,</span>
 <span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Flat curves indicate poor ability differentiation"</span>,</span>
-<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (Î¸)"</span>, <span class="at">y =</span> <span class="st">"P(Correct)"</span>, <span class="at">color =</span> <span class="st">"Item"</span>) <span class="sc">+</span></span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (theta)"</span>, <span class="at">y =</span> <span class="st">"P(Correct)"</span>, <span class="at">color =</span> <span class="st">"Item"</span>) <span class="sc">+</span></span>
 <span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 3: Top discriminating items</span></span>
@@ -731,9 +731,9 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">y =</span> prob, <span class="at">color =</span> item)) <span class="sc">+</span></span>
 <span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
 <span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray50"</span>) <span class="sc">+</span></span>
-<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"ICC â€” High Discrimination Items (top 6 by a)"</span>,</span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"ICC - High Discrimination Items (top 6 by a)"</span>,</span>
 <span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Steep curves indicate strong ability differentiation"</span>,</span>
-<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (Î¸)"</span>, <span class="at">y =</span> <span class="st">"P(Correct)"</span>, <span class="at">color =</span> <span class="st">"Item"</span>) <span class="sc">+</span></span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (theta)"</span>, <span class="at">y =</span> <span class="st">"P(Correct)"</span>, <span class="at">color =</span> <span class="st">"Item"</span>) <span class="sc">+</span></span>
 <span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_icc_all)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -778,14 +778,14 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <pre><code>ICC plots saved.</code></pre>
 </div>
 </div>
-<p><strong>Interpretation:</strong> The full ICC plot shows the characteristic fan-shape expected in a well-functioning test â€” curves spread across the ability continuum with varying slopes. The problematic items (a &lt; 0.5) show near-flat curves that fail to differentiate ability levels; <code>CR556Q04S</code> never exceeds P = 0.35 even at Î¸ = 4. The top-discriminating items show steep sigmoidal curves with inflection points ranging from Î¸ â‰ˆ -1.5 to Î¸ â‰ˆ 0, confirming they measure effectively within the testâ€™s target ability range.</p>
+<p><strong>Interpretation:</strong> The full ICC plot shows the characteristic fan-shape expected in a well-functioning test - curves spread across the ability continuum with varying slopes. The problematic items (a &lt; 0.5) show near-flat curves that fail to differentiate ability levels; <code>CR556Q04S</code> never exceeds P = 0.35 even at theta = 4. The top-discriminating items show steep sigmoidal curves with inflection points ranging from theta approx. -1.5 to theta approx. 0, confirming they measure effectively within the test’s target ability range.</p>
 <hr>
 </section>
 </section>
-<section id="phase-4-test-information-function" class="level2">
-<h2 class="anchored" data-anchor-id="phase-4-test-information-function">Phase 4 â€” Test Information Function</h2>
-<section id="kernel-13-iif-and-tif" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-13-iif-and-tif">Kernel 13 â€” IIF and TIF</h3>
+<section id="phase-4---test-information-function" class="level2">
+<h2 class="anchored" data-anchor-id="phase-4---test-information-function">Phase 4 - Test Information Function</h2>
+<section id="kernel-13---iif-and-tif" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-13---iif-and-tif">Kernel 13 - IIF and TIF</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -812,9 +812,9 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-22"><a href="#cb55-22" aria-hidden="true" tabindex="-1"></a>p_iif <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(iif_data, <span class="fu">aes</span>(<span class="at">x =</span> theta, <span class="at">y =</span> info, <span class="at">group =</span> item)) <span class="sc">+</span></span>
 <span id="cb55-23"><a href="#cb55-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">color =</span> <span class="st">"#2E86AB"</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"Item Information Functions â€” All Items (2PL)"</span>,</span>
+<span id="cb55-24"><a href="#cb55-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"Item Information Functions - All Items (2PL)"</span>,</span>
 <span id="cb55-25"><a href="#cb55-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Each curve shows measurement precision contributed by one item"</span>,</span>
-<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (Î¸)"</span>, <span class="at">y =</span> <span class="st">"Information I(Î¸)"</span>) <span class="sc">+</span></span>
+<span id="cb55-26"><a href="#cb55-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (theta)"</span>, <span class="at">y =</span> <span class="st">"Information I(theta)"</span>) <span class="sc">+</span></span>
 <span id="cb55-27"><a href="#cb55-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
 <span id="cb55-28"><a href="#cb55-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-29"><a href="#cb55-29" aria-hidden="true" tabindex="-1"></a>p_tif <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(tif_data, <span class="fu">aes</span>(<span class="at">x =</span> theta)) <span class="sc">+</span></span>
@@ -823,11 +823,11 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb55-32"><a href="#cb55-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">linewidth =</span> <span class="fl">0.9</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
 <span id="cb55-33"><a href="#cb55-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
 <span id="cb55-34"><a href="#cb55-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Test Information"</span>,</span>
-<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="sc">~</span> . <span class="sc">/</span> <span class="dv">20</span>, <span class="at">name =</span> <span class="st">"Standard Error SE(Î¸)"</span>)</span>
+<span id="cb55-35"><a href="#cb55-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="sc">~</span> . <span class="sc">/</span> <span class="dv">20</span>, <span class="at">name =</span> <span class="st">"Standard Error SE(theta)"</span>)</span>
 <span id="cb55-36"><a href="#cb55-36" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb55-37"><a href="#cb55-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"Test Information Function (TIF)"</span>,</span>
 <span id="cb55-38"><a href="#cb55-38" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Blue = information (higher is better) | Red dashed = SE (lower is better)"</span>,</span>
-<span id="cb55-39"><a href="#cb55-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (Î¸)"</span>) <span class="sc">+</span></span>
+<span id="cb55-39"><a href="#cb55-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Ability (theta)"</span>) <span class="sc">+</span></span>
 <span id="cb55-40"><a href="#cb55-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
 <span id="cb55-41"><a href="#cb55-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-42"><a href="#cb55-42" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_iif)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -857,10 +857,10 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>peak_se    <span class="ot">&lt;-</span> <span class="fu">min</span>(tif_data<span class="sc">$</span>se)</span>
 <span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>good_range <span class="ot">&lt;-</span> tif_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(total_info <span class="sc">&gt;=</span> peak_info <span class="sc">*</span> <span class="fl">0.5</span>)</span>
 <span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Peak information at Î¸ ="</span>, <span class="fu">round</span>(peak_theta, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Peak information at theta ="</span>, <span class="fu">round</span>(peak_theta, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Peak information at Î¸ = -1.146 </code></pre>
+<pre><code>Peak information at theta = -1.146 </code></pre>
 </div>
 <details class="code-fold">
 <summary>Show code</summary>
@@ -890,19 +890,19 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"reports/figures/tif_se.png"</span>,        p_tif, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">150</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p><strong>Interpretation:</strong> Peak information occurs at Î¸ = -1.146 (maximum TIF = 62.495, minimum SE = 0.126). The test measures with highest precision in the range Î¸ = -2.51 to 0.50 â€” corresponding to below-average to slightly above-average ability. Precision declines sharply for Î¸ &gt; 1, indicating limited measurement utility for high-ability students. This is a deliberate design feature of PISA, which targets population-level comparisons rather than individual diagnosis at the high end of the ability distribution.</p>
+<p><strong>Interpretation:</strong> Peak information occurs at theta = -1.146 (maximum TIF = 62.495, minimum SE = 0.126). The test measures with highest precision in the range theta = -2.51 to 0.50 - corresponding to below-average to slightly above-average ability. Precision declines sharply for theta &gt; 1, indicating limited measurement utility for high-ability students. This is a deliberate design feature of PISA, which targets population-level comparisons rather than individual diagnosis at the high end of the ability distribution.</p>
 <hr>
 </section>
 </section>
-<section id="phase-5-differential-item-functioning" class="level2">
-<h2 class="anchored" data-anchor-id="phase-5-differential-item-functioning">Phase 5 â€” Differential Item Functioning</h2>
+<section id="phase-5---differential-item-functioning" class="level2">
+<h2 class="anchored" data-anchor-id="phase-5---differential-item-functioning">Phase 5 - Differential Item Functioning</h2>
 <section id="conceptual-background-1" class="level3">
 <h3 class="anchored" data-anchor-id="conceptual-background-1">Conceptual Background</h3>
 <p>Differential Item Functioning (DIF) occurs when students of equal ability but from different groups have systematically different probabilities of answering an item correctly. DIF is a threat to measurement fairness: an item with DIF does not measure the same latent trait equivalently across groups.</p>
-<p>This analysis tests DIF between <strong>OECD</strong> (37 member countries, n = 15,276) and <strong>Non-OECD</strong> countries (39 countries, n = 14,686) using Lordâ€™s Ï‡Â² test on the 2PL parameters (a, d). The multigroup model allows each group to have its own ability distribution while constraining item parameters to be equal under the null hypothesis.</p>
+<p>This analysis tests DIF between <strong>OECD</strong> (37 member countries, n = 15,276) and <strong>Non-OECD</strong> countries (39 countries, n = 14,686) using Lord’s chi-square test on the 2PL parameters (a, d). The multigroup model allows each group to have its own ability distribution while constraining item parameters to be equal under the null hypothesis.</p>
 </section>
-<section id="kernel-14-multigroup-model" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-14-multigroup-model">Kernel 14 â€” Multigroup Model</h3>
+<section id="kernel-14---multigroup-model" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-14---multigroup-model">Kernel 14 - Multigroup Model</h3>
 <blockquote class="blockquote">
 <p><strong>Note:</strong> The multigroup model is cached. Fitting takes approximately 20 minutes on the development sample.</p>
 </blockquote>
@@ -926,8 +926,8 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 </details>
 </div>
 </section>
-<section id="kernel-15-lords-Ï‡Â²-dif-test" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-15-lords-Ï‡Â²-dif-test">Kernel 15 â€” Lordâ€™s Ï‡Â² DIF Test</h3>
+<section id="kernel-15---lords-chi-square-dif-test" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-15---lords-chi-square-dif-test">Kernel 15 - Lord’s chi-square DIF Test</h3>
 <blockquote class="blockquote">
 <p><strong>Note:</strong> DIF test results are cached. The test takes approximately 50 minutes on the development sample with <code>scheme = "drop"</code>.</p>
 </blockquote>
@@ -951,8 +951,8 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 </details>
 </div>
 </section>
-<section id="kernel-16-dif-results-and-visualization" class="level3">
-<h3 class="anchored" data-anchor-id="kernel-16-dif-results-and-visualization">Kernel 16 â€” DIF Results and Visualization</h3>
+<section id="kernel-16---dif-results-and-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="kernel-16---dif-results-and-visualization">Kernel 16 - DIF Results and Visualization</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show code</summary>
@@ -999,11 +999,11 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 </div>
 <details class="code-fold">
 <summary>Show code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(dif_items, <span class="at">caption =</span> <span class="st">"Items with largest DIF â€” Lord's Ï‡Â² (OECD vs Non-OECD)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(dif_items, <span class="at">caption =</span> <span class="st">"Items with largest DIF - Lord's chi-square (OECD vs Non-OECD)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<caption>Items with largest DIF â€” Lordâ€™s Ï‡Â² (OECD vs Non-OECD)</caption>
+<caption>Items with largest DIF - Lord’s chi-square (OECD vs Non-OECD)</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -1096,9 +1096,9 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"DIF"</span> <span class="ot">=</span> <span class="st">"#E84855"</span>, <span class="st">"No DIF"</span> <span class="ot">=</span> <span class="st">"#2E86AB"</span>)) <span class="sc">+</span></span>
 <span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"DIF Analysis â€” Lord's Ï‡Â² Test (OECD vs Non-OECD)"</span>,</span>
-<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = critical value (Î± = 0.05, df = 2)"</span>,</span>
-<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Item"</span>, <span class="at">y =</span> <span class="st">"Ï‡Â² statistic"</span>, <span class="at">fill =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title    =</span> <span class="st">"DIF Analysis - Lord's chi-square Test (OECD vs Non-OECD)"</span>,</span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = critical value (alpha = 0.05, df = 2)"</span>,</span>
+<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Item"</span>, <span class="at">y =</span> <span class="st">"chi-square statistic"</span>, <span class="at">fill =</span> <span class="st">""</span>) <span class="sc">+</span></span>
 <span id="cb79-11"><a href="#cb79-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">9</span>)</span>
 <span id="cb79-12"><a href="#cb79-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb79-13"><a href="#cb79-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_dif)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1120,8 +1120,8 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <pre><code>DIF plot saved.</code></pre>
 </div>
 </div>
-<p><strong>Interpretation:</strong> 58 of 191 items (30.4%) show statistically significant DIF between OECD and Non-OECD groups after Bonferroni correction. The five items with the largest DIF magnitude (Ï‡Â² &gt; 57) â€” <code>CR545Q07S</code>, <code>CR590Q44S</code>, <code>CR570Q05S</code>, <code>CR590Q57S</code>, <code>CR560Q08S</code> â€” likely reflect cultural or linguistic context effects that favor students from OECD educational systems.</p>
-<p>A DIF rate of 30.4% is high by conventional standards (&lt;10â€“15%). Two caveats must be noted: (1) with n = 29,962, statistical power is very high and even small parameter differences reach significance; (2) statistical DIF does not automatically imply bias â€” expert review of item content is required to determine whether differential functioning reflects construct-irrelevant variance or legitimate group differences in the constructs measured. These findings suggest that direct OECD/Non-OECD comparisons on PISA reading scores should be interpreted with caution at the item level.</p>
+<p><strong>Interpretation:</strong> 58 of 191 items (30.4%) show statistically significant DIF between OECD and Non-OECD groups after Bonferroni correction. The five items with the largest DIF magnitude (chi-square &gt; 57) - <code>CR545Q07S</code>, <code>CR590Q44S</code>, <code>CR570Q05S</code>, <code>CR590Q57S</code>, <code>CR560Q08S</code> - likely reflect cultural or linguistic context effects that favor students from OECD educational systems.</p>
+<p>A DIF rate of 30.4% is high by conventional standards (&lt;10-15%). Two caveats must be noted: (1) with n = 29,962, statistical power is very high and even small parameter differences reach significance; (2) statistical DIF does not automatically imply bias - expert review of item content is required to determine whether differential functioning reflects construct-irrelevant variance or legitimate group differences in the constructs measured. These findings suggest that direct OECD/Non-OECD comparisons on PISA reading scores should be interpreted with caution at the item level.</p>
 <hr>
 </section>
 </section>
@@ -1145,7 +1145,7 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 </tr>
 <tr class="even">
 <td>Model selection</td>
-<td>2PL selected over 1PL â€” AIC Î” = 11,571, BIC Î” = 9,992, LRT p &lt; .001</td>
+<td>2PL selected over 1PL - AIC Delta = 11,571, BIC Delta = 9,992, LRT p &lt; .001</td>
 </tr>
 <tr class="odd">
 <td>Item diagnostics</td>
@@ -1153,7 +1153,7 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 </tr>
 <tr class="even">
 <td>Test information</td>
-<td>Peak precision at Î¸ = -1.15; effective range Î¸ = -2.51 to 0.50</td>
+<td>Peak precision at theta = -1.15; effective range theta = -2.51 to 0.50</td>
 </tr>
 <tr class="odd">
 <td>DIF analysis</td>
@@ -1167,14 +1167,14 @@ CR566Q14S 0.412  0.833 0 1</code></pre>
 <h2 class="anchored" data-anchor-id="technical-notes">Technical Notes</h2>
 <p><strong>Software:</strong> R 4.5, <code>mirt</code> 1.40, <code>ggplot2</code> 3.5, <code>haven</code> 2.5, <code>dplyr</code> 1.1, Quarto 1.9</p>
 <p><strong>Reproducibility:</strong> All random processes use <code>set.seed(42)</code>. Raw data is not included due to size and redistribution constraints. Processed <code>.rds</code> files are generated locally in <code>data/processed/</code> and are not tracked by Git.</p>
-<p><strong>Limitations:</strong> All models are calibrated on the development sample (n â‰ˆ 30,000). Production calibration on the full dataset (n = 243,225) is expected to produce more stable parameter estimates, particularly for items with sparse response patterns.</p>
+<p><strong>Limitations:</strong> All models are calibrated on the development sample (n approx. 30,000). Production calibration on the full dataset (n = 243,225) is expected to produce more stable parameter estimates, particularly for items with sparse response patterns.</p>
 </section>
 
 </main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "î§‹";
+    const icon = "";
     const anchorJS = new window.AnchorJS();
     anchorJS.options = {
       placement: 'right',

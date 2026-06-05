@@ -1,5 +1,5 @@
 # =============================================================================
-# IRT Psychometric Dashboard — PISA 2022
+# IRT Psychometric Dashboard - PISA 2022
 # app/app.R
 # Author: Washington Casamen Nolasco
 # =============================================================================
@@ -43,7 +43,7 @@ dif_rate    <- mean(dif_df$dif_flag == "DIF", na.rm = TRUE) * 100
 # -----------------------------------------------------------------------------
 
 ui <- navbarPage(
-  title = "IRT Psychometric Dashboard — PISA 2022",
+  title = "IRT Psychometric Dashboard - PISA 2022",
   theme = bslib::bs_theme(bootswatch = "cosmo"),
 
   # ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ ui <- navbarPage(
         column(12,
           h3("1PL vs 2PL Model Fit"),
           p("The 2PL model is selected based on AIC, BIC, and Likelihood Ratio Test.
-            The 3PL failed to converge — PISA items are largely constructed-response,
+            The 3PL failed to converge - PISA items are largely constructed-response,
             making the pseudo-guessing parameter theoretically unjustified."),
           br()
         )
@@ -71,7 +71,7 @@ ui <- navbarPage(
         ),
         column(8,
           wellPanel(
-            h4("Parameter Distribution — 2PL"),
+            h4("Parameter Distribution - 2PL"),
             plotOutput("param_dist_plot", height = "350px")
           )
         )
@@ -136,18 +136,18 @@ ui <- navbarPage(
             br(),
             tableOutput("tif_summary_table"),
             br(),
-            h5("Explore θ point"),
-            sliderInput("theta_point", "θ value:",
+            h5("Explore theta point"),
+            sliderInput("theta_point", "theta value:",
                         min = -4, max = 4, value = 0, step = 0.1),
             br(),
-            h5("At selected θ:"),
+            h5("At selected theta:"),
             tableOutput("tif_point_table")
           )
         ),
         column(9,
           wellPanel(
             h4("Test Information Function with Standard Error"),
-            p("Blue = Test Information (higher is better) | Red = SE(θ) (lower is better)"),
+            p("Blue = Test Information (higher is better) | Red = SE(theta) (lower is better)"),
             plotOutput("tif_plot", height = "400px")
           )
         )
@@ -164,9 +164,9 @@ ui <- navbarPage(
       br(),
       fluidRow(
         column(12,
-          h3("Differential Item Functioning — OECD vs Non-OECD"),
+          h3("Differential Item Functioning - OECD vs Non-OECD"),
           p(sprintf(
-            "Lord's χ² test on 2PL parameters (a, d). Adjusted p-values use Bonferroni correction. %s of %s items (%.1f%%) show significant DIF at α = 0.05.",
+            "Lord's chi-square test on 2PL parameters (a, d). Adjusted p-values use Bonferroni correction. %s of %s items (%.1f%%) show significant DIF at alpha = 0.05.",
             dif_count,
             item_count,
             dif_rate
@@ -190,7 +190,7 @@ ui <- navbarPage(
         ),
         column(8,
           wellPanel(
-            h4("DIF Magnitude — Lord's χ²"),
+            h4("DIF Magnitude - Lord's chi-square"),
             plotOutput("dif_plot", height = "500px")
           )
         )
@@ -263,14 +263,14 @@ server <- function(input, output, session) {
       div(
         style = "background-color:#E84855; color:white; padding:8px 12px;
                  border-radius:4px; text-align:center; font-weight:bold;",
-        paste0("⚠ DIF Flagged — χ² = ", round(p$X2, 2),
+        paste0("DIF: DIF Flagged - chi-square = ", round(p$X2, 2),
                " | adj_p = ", formatC(p$adj_p, format = "e", digits = 2))
       )
     } else {
       div(
         style = "background-color:#2E86AB; color:white; padding:8px 12px;
                  border-radius:4px; text-align:center; font-weight:bold;",
-        "✓ No DIF Detected"
+        "OK: No DIF Detected"
       )
     }
   })
@@ -289,9 +289,9 @@ server <- function(input, output, session) {
       geom_vline(xintercept = p$b, linetype = "dotted", color = "gray60") +
       annotate("text", x = p$b + 0.15, y = 0.05,
                label = paste0("b = ", round(p$b, 2)), hjust = 0, size = 3.5) +
-      labs(title    = paste("ICC —", input$selected_item),
+      labs(title    = paste("ICC -", input$selected_item),
            subtitle = paste0("a = ", round(p$a, 3), "  |  b = ", round(p$b, 3)),
-           x = "Ability (θ)", y = "P(Correct)") +
+           x = "Ability (theta)", y = "P(Correct)") +
       theme_minimal(base_size = 12) +
       ylim(0, 1)
   })
@@ -307,8 +307,8 @@ server <- function(input, output, session) {
     ggplot(df, aes(x = theta, y = info)) +
       geom_line(color = color, linewidth = 1.1) +
       geom_vline(xintercept = p$b, linetype = "dotted", color = "gray60") +
-      labs(title = paste("IIF —", input$selected_item),
-           x = "Ability (θ)", y = "Information I(θ)") +
+      labs(title = paste("IIF -", input$selected_item),
+           x = "Ability (theta)", y = "Information I(theta)") +
       theme_minimal(base_size = 12)
   })
 
@@ -321,7 +321,7 @@ server <- function(input, output, session) {
     good_range <- tif_data %>% filter(total_info >= peak_info * 0.5)
 
     data.frame(
-      Metric = c("Peak θ", "Max Information", "Min SE",
+      Metric = c("Peak theta", "Max Information", "Min SE",
                  "Effective range (>50% peak)"),
       Value  = c(round(peak_theta, 2),
                  round(peak_info, 2),
@@ -350,10 +350,10 @@ server <- function(input, output, session) {
                  color = "gray40", linetype = "solid", linewidth = 0.7) +
       scale_y_continuous(
         name     = "Test Information",
-        sec.axis = sec_axis(~ . / scale_factor, name = "Standard Error SE(θ)")
+        sec.axis = sec_axis(~ . / scale_factor, name = "Standard Error SE(theta)")
       ) +
-      labs(x = "Ability (θ)",
-           caption = "Blue = Test Information | Red dashed = SE(θ) | Vertical line = selected θ") +
+      labs(x = "Ability (theta)",
+           caption = "Blue = Test Information | Red dashed = SE(theta) | Vertical line = selected theta") +
       theme_minimal(base_size = 12)
   })
 
@@ -383,7 +383,7 @@ server <- function(input, output, session) {
                  linetype = "dashed", color = "black", linewidth = 0.8) +
       scale_fill_manual(values = c("DIF" = "#E84855", "No DIF" = "#2E86AB")) +
       coord_flip() +
-      labs(x = "Item", y = "χ² statistic", fill = "") +
+      labs(x = "Item", y = "chi-square statistic", fill = "") +
       theme_minimal(base_size = 9)
   })
 
@@ -405,3 +405,4 @@ server <- function(input, output, session) {
 # -----------------------------------------------------------------------------
 
 shinyApp(ui = ui, server = server)
+

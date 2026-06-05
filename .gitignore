@@ -43,10 +43,11 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 
-# Large data files — download instructions in README
+# Large data files - download instructions in README
 data/raw/
 data/processed/
 
 # Local IDE / assistant state
 .positai
 .vscode/
+
