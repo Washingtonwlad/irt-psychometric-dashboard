@@ -76,6 +76,12 @@ irt-psychometric-dashboard/
 |-- reports/
 |   `-- figures/                    # Exported ICC, IIF, TIF, and DIF plots
 |
+|-- scripts/
+|   |-- check_environment.ps1        # Validate R, Quarto, and required packages
+|   |-- build_cache.ps1              # PowerShell wrapper for cache rebuilds
+|   |-- build_cache.R                # Rebuild local data/model caches
+|   `-- render_report.ps1            # Render report and copy output to docs/
+|
 |-- docs/
 |   |-- index.html                  # GitHub Pages entry point
 |   `-- irt_analysis_files/         # Static report assets for GitHub Pages
@@ -143,6 +149,12 @@ The Shiny app provides:
 
 ## Setup
 
+Validate the local R and Quarto environment:
+
+```powershell
+.\scripts\check_environment.ps1
+```
+
 Install the required R packages:
 
 ```r
@@ -173,10 +185,18 @@ Place the PISA 2022 Cognitive Item Data File here:
 data/raw/CY08MSP_STU_COG.SAV
 ```
 
-Render the Quarto report:
+Rebuild local cached `.rds` objects when starting from raw data:
 
-```r
-quarto::quarto_render("analysis/irt_analysis.qmd")
+```powershell
+.\scripts\build_cache.ps1
+```
+
+This step is computationally expensive because it reads the full PISA file and fits IRT models. Run it only when raw data or modeling decisions change.
+
+Render the Quarto report and update the GitHub Pages files:
+
+```powershell
+.\scripts\render_report.ps1
 ```
 
 Run the Shiny dashboard:
@@ -192,9 +212,8 @@ The published report is served from the `docs/` folder on the `main` branch.
 To update the public report after re-rendering locally:
 
 ```powershell
-Copy-Item analysis\irt_analysis.html docs\index.html -Force
-Copy-Item analysis\irt_analysis_files docs\irt_analysis_files -Recurse -Force
-git add analysis docs reports src app README.md
+.\scripts\render_report.ps1
+git add analysis docs reports src app scripts README.md
 git commit -m "Update IRT report"
 git push origin main
 ```
