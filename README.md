@@ -1,155 +1,218 @@
-# IRT Psychometric Dashboard: Item Calibration & Analysis with PISA 2022
+# IRT Psychometric Dashboard: Item Calibration & DIF Analysis with PISA 2022
 
 ![R](https://img.shields.io/badge/R-4.3%2B-blue?logo=r)
 ![mirt](https://img.shields.io/badge/mirt-1.40%2B-orange)
 ![Quarto](https://img.shields.io/badge/Quarto-1.4%2B-blueviolet?logo=quarto)
 ![Shiny](https://img.shields.io/badge/Shiny-1.8%2B-red?logo=r)
 ![License](https://img.shields.io/badge/License-MIT-green)
-![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
 
-> **How do individual test items behave across the ability continuum — and what do their parameters tell us about measurement quality?**
+> **How do individual test items behave across the ability continuum, and what do their parameters reveal about measurement quality and cross-group fairness?**
 
----
+## Live Report
+
+**Published Quarto report:** [washingtonwlad.github.io/irt-psychometric-dashboard](https://washingtonwlad.github.io/irt-psychometric-dashboard/)
+
+The report contains the full analytical pipeline, including data preparation decisions, model calibration, item diagnostics, test information, and Differential Item Functioning (DIF) results.
 
 ## Overview
 
-Classical Test Theory (CTT) describes item difficulty as the proportion of correct responses in a sample — a statistic that changes every time the sample changes. Item Response Theory (IRT) resolves this by modeling the probability of a correct response as a function of both **person ability** (θ) and **item parameters** that are invariant across samples.
+Classical Test Theory (CTT) describes item difficulty as the proportion of correct responses in a sample, which changes when the sample changes. Item Response Theory (IRT) models the probability of a correct response as a function of both **person ability** (`theta`) and **item parameters**, making it possible to evaluate item behavior across the latent ability continuum.
 
-This project applies IRT to PISA 2022 cognitive reading items, producing:
+This project applies IRT to PISA 2022 cognitive reading items and delivers:
 
-1. **Item calibration** under 1PL, 2PL, and 3PL models with comparative fit analysis
-2. **Item Characteristic Curves (ICC)** and **Test Information Functions (TIF)** with organizational interpretation
-3. **Differential Item Functioning (DIF)** analysis across country groups
-4. **Interactive Shiny dashboard** for item-level exploration and model comparison
+1. Item calibration under 1PL, 2PL, and 3PL specifications
+2. Model comparison using AIC, BIC, and likelihood ratio testing
+3. Item Characteristic Curves (ICC) and Item Information Functions (IIF)
+4. Test Information Function (TIF) and standard error analysis
+5. Differential Item Functioning (DIF) analysis between OECD and Non-OECD country groups
+6. A Shiny dashboard for interactive item-level exploration
 
-The analytical lens is explicitly psychometric: items are treated as measurement instruments with quantifiable properties, not as generic binary variables.
+The analytical lens is explicitly psychometric: items are treated as measurement instruments with interpretable parameters, not as generic binary variables.
 
----
+## Key Findings
+
+| Area | Finding |
+|---|---|
+| Item inventory | 191 clean dichotomous reading items retained for IRT modeling |
+| Valid respondents | 243,225 students with at least one reading item |
+| Development sample | Approximately 30,000 students sampled proportionally by country |
+| Model selection | 2PL selected over 1PL based on AIC, BIC, and LRT |
+| 3PL result | 3PL failed to converge and was excluded from interpretation |
+| Measurement precision | Peak information occurs around `theta = -1.15` |
+| DIF | 58 of 191 items showed statistically significant DIF after correction |
 
 ## Dataset
 
-**Source:** [PISA 2022 — Cognitive Item Data File](https://www.oecd.org/pisa/data/) — OECD  
-**Format:** SPSS (.sav) — loaded via `haven::read_sav()`  
-**Coverage:** ~600,000 students across 80+ countries  
-**Domain:** Reading literacy cognitive items (dichotomous responses)
+**Source:** [PISA 2022 Cognitive Item Data File](https://www.oecd.org/pisa/data/) - OECD  
+**Format:** SPSS (`.sav`) loaded with `haven::read_sav()`  
+**Coverage:** 600,000+ students across 80+ countries  
+**Domain used:** Reading literacy cognitive items  
+**Response type used:** Dichotomous item responses
 
-> **Data access:** The raw PISA 2022 data file is not included in this repository due to file size constraints (~1GB). Download the **Cognitive Item Data File** (SPSS format) from the OECD PISA data portal and place it in `data/raw/`.
+> **Data access:** The raw PISA 2022 data file is not included in this repository because of file size and redistribution constraints. Download the Cognitive Item Data File from the OECD PISA data portal and place it in `data/raw/`.
 
----
+Processed `.rds` files are also excluded from Git. They can be regenerated by running the Quarto analysis after placing the raw `.sav` file in `data/raw/`.
 
 ## Project Structure
 
-```
+```text
 irt-psychometric-dashboard/
-│
-├── README.md
-├── .gitignore
-│
-├── analysis/
-│   └── irt_analysis.qmd          # Quarto document — full IRT pipeline
-│
-├── app/
-│   └── app.R                     # Shiny interactive dashboard
-│
-├── src/
-│   └── irt_functions.R           # Reusable IRT helper functions
-│
-├── reports/
-│   └── figures/                  # Exported plots (ICC, TIF, DIF)
-│
-└── data/
-    ├── raw/                      # PISA .sav file (not tracked by git)
-    └── processed/                # Cleaned item response matrix (.rds)
+|-- README.md
+|-- LICENSE
+|-- .gitignore
+|
+|-- analysis/
+|   |-- irt_analysis.qmd            # Full Quarto analytical pipeline
+|   |-- irt_analysis.html           # Rendered local report
+|   `-- irt_analysis_files/         # Quarto-rendered report assets
+|
+|-- app/
+|   `-- app.R                       # Shiny dashboard
+|
+|-- src/
+|   `-- irt_functions.R             # Reusable IRT helper functions
+|
+|-- reports/
+|   `-- figures/                    # Exported ICC, IIF, TIF, and DIF plots
+|
+|-- docs/
+|   |-- index.html                  # GitHub Pages entry point
+|   `-- irt_analysis_files/         # Static report assets for GitHub Pages
+|
+`-- data/
+    |-- raw/                        # Local only: PISA .sav file
+    `-- processed/                  # Local only: cached .rds model/data files
 ```
-
----
 
 ## Analytical Pipeline
 
-### Phase 1 — Data preparation (`analysis/irt_analysis.qmd`)
-Load PISA 2022 cognitive items, select reading domain, construct binary response matrix. Document missing data patterns and item response distributions.
+### Phase 1 - Data Preparation
 
-### Phase 2 — Model calibration
-Fit 1PL (Rasch), 2PL, and 3PL models using `mirt`. Compare model fit via AIC, BIC, and likelihood ratio tests. Document parameter estimates with psychometric interpretation.
+The pipeline loads the PISA 2022 Cognitive Item Data File, selects reading-domain cognitive items, audits item coding, excludes composite and polytomous score columns, and constructs a binary item response matrix.
 
-### Phase 3 — Item diagnostics
-Generate Item Characteristic Curves (ICC) and Item Information Functions (IIF) for each item. Identify misfitting items using standardized residuals and infit/outfit statistics.
+### Phase 2 - Model Calibration
 
-### Phase 4 — Test Information Function
-Compute Test Information Function (TIF) to identify the ability range where the test measures most precisely. Compare information across model specifications.
+The analysis fits 1PL (Rasch), 2PL, and 3PL IRT models using `mirt`. The 2PL model is selected because item discriminations vary meaningfully across items. The 3PL model is documented but excluded because it did not converge and is theoretically less appropriate for many constructed-response items.
 
-### Phase 5 — DIF analysis
-Test for Differential Item Functioning across country groups using the Lord's χ² test. Flag items that may function differently across cultural contexts.
+### Phase 3 - Item Diagnostics
 
-### Phase 6 — Interactive dashboard (`app/app.R`)
-Shiny app with:
-- Model selector (1PL / 2PL / 3PL)
-- Item browser with ICC and parameter estimates
-- Test Information Function plot
-- DIF flag explorer
+Item parameters are interpreted through ICCs and IIFs. Low-discrimination and extreme-difficulty items are flagged for future item review.
 
----
+### Phase 4 - Test Information
+
+The TIF identifies the ability range where the item set measures most precisely. Standard error is plotted alongside total information to show where measurement becomes less reliable.
+
+### Phase 5 - DIF Analysis
+
+DIF is tested between OECD and Non-OECD groups using a multigroup IRT model and Lord's chi-square test. Results are interpreted with caution because large samples can make small differences statistically significant.
+
+### Phase 6 - Interactive Dashboard
+
+The Shiny app provides:
+
+- 1PL vs 2PL model comparison
+- Item browser with ICC and IIF plots
+- Item parameter summaries
+- TIF and standard error exploration
+- DIF filtering and item-level result table
 
 ## Key Psychometric Concepts
 
 | Concept | Symbol | Interpretation |
-|---------|--------|----------------|
-| Person ability | θ (theta) | Latent trait measured by the test — standardized, mean=0 |
-| Item difficulty | b | θ value at which P(correct) = 0.50 |
-| Item discrimination | a | Slope of the ICC — how well the item separates ability levels |
-| Pseudo-guessing | c | Lower asymptote — P(correct) for very low θ |
-| Item Information | I(θ) | Precision of measurement at each ability level |
-| Test Information | TIF | Sum of item information — where the test measures best |
-| DIF | — | Item behaves differently across demographic groups |
-
----
+|---|---|---|
+| Person ability | theta | Latent trait measured by the test |
+| Item difficulty | b | Ability level where the item becomes likely to be answered correctly |
+| Item discrimination | a | How sharply the item differentiates ability levels |
+| Pseudo-guessing | c | Lower asymptote in 3PL models |
+| Item information | I(theta) | Measurement precision contributed by an item |
+| Test information | TIF | Total measurement precision across items |
+| DIF | DIF | Item behavior differs across groups after controlling for ability |
 
 ## Technical Stack
 
-| Component | Package |
-|-----------|---------|
+| Component | Package / Tool |
+|---|---|
 | IRT modeling | `mirt` |
 | Data loading | `haven` |
 | Data manipulation | `dplyr`, `tidyr` |
-| Visualization | `ggplot2`, `patchwork` |
+| Visualization | `ggplot2`, `gridExtra` |
 | Reporting | `Quarto` |
-| Dashboard | `shiny`, `shinydashboard` |
-| DIF analysis | `mirt` (lordif) |
-
----
+| Dashboard | `shiny`, `bslib`, `DT` |
+| Deployment | GitHub Pages |
 
 ## Setup
 
-```r
-# Install required packages
-install.packages(c("mirt", "haven", "dplyr", "tidyr",
-                   "ggplot2", "patchwork", "shiny",
-                   "shinydashboard", "quarto"))
-```
+Install the required R packages:
 
 ```r
-# Render Quarto analysis
+install.packages(c(
+  "mirt",
+  "haven",
+  "dplyr",
+  "tidyr",
+  "ggplot2",
+  "gridExtra",
+  "shiny",
+  "bslib",
+  "DT",
+  "quarto"
+))
+```
+
+Create the local data folders if needed:
+
+```r
+dir.create("data/raw", recursive = TRUE, showWarnings = FALSE)
+dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
+```
+
+Place the PISA 2022 Cognitive Item Data File here:
+
+```text
+data/raw/CY08MSP_STU_COG.SAV
+```
+
+Render the Quarto report:
+
+```r
 quarto::quarto_render("analysis/irt_analysis.qmd")
 ```
 
+Run the Shiny dashboard:
+
 ```r
-# Run Shiny dashboard
 shiny::runApp("app/app.R")
 ```
 
-> Place PISA 2022 Cognitive Item Data File (.sav) in `data/raw/` before running.
+## GitHub Pages
 
----
+The published report is served from the `docs/` folder on the `main` branch.
+
+To update the public report after re-rendering locally:
+
+```powershell
+Copy-Item analysis\irt_analysis.html docs\index.html -Force
+Copy-Item analysis\irt_analysis_files docs\irt_analysis_files -Recurse -Force
+git add analysis docs reports src app README.md
+git commit -m "Update IRT report"
+git push origin main
+```
+
+## Limitations
+
+- The public repository does not include raw or processed PISA data files.
+- Models were calibrated on a proportional development sample to reduce computation time.
+- DIF findings indicate statistical differential functioning, not automatic item bias; substantive item review is required.
+- The Shiny app expects cached `.rds` objects in `data/processed/`, which are generated by the analysis pipeline.
 
 ## Author
 
 **Washington Casamen Nolasco**  
-Psychologist · Behavioral Data Scientist  
+Psychologist | Behavioral Data Scientist  
 Specialization: Psychometrics, IRT, People Analytics, Bayesian Modeling  
-[GitHub](https://github.com/Washingtonwlad) · [Upwork](#) · [LinkedIn](#)
-
----
+[GitHub](https://github.com/Washingtonwlad)
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License - see [LICENSE](LICENSE) for details.
