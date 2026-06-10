@@ -50,4 +50,4 @@ data/processed/
 # Local IDE / assistant state
 .positai
 .vscode/
-
+.quarto-local/
