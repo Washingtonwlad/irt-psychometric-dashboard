@@ -39,8 +39,11 @@ The analytical lens is explicitly psychometric: items are treated as measurement
 | Development sample | Approximately 30,000 students sampled proportionally by country |
 | Model selection | 2PL selected over 1PL based on AIC, BIC, and LRT |
 | 3PL result | 3PL failed to converge and was excluded from interpretation |
+| Item fit | All 191 items within infit/outfit MSQ [0.5, 1.5]; none flagged as misfitting |
+| Dimensionality | Unidimensional 2PL supported; residual Q3 dependence minimal (~1% of well-observed pairs > 0.20) |
 | Measurement precision | Peak information occurs around `theta = -1.15` |
-| DIF | 58 of 191 items showed statistically significant DIF after correction |
+| Reliability | Empirical reliability 0.87 under the booklet design (0.97 for the full 191-item bank) |
+| DIF | 58 of 191 items (30.4%) show significant DIF (OECD vs Non-OECD) after Holm correction |
 
 ## Dataset
 
@@ -101,13 +104,15 @@ The pipeline loads the PISA 2022 Cognitive Item Data File, selects reading-domai
 
 The analysis fits 1PL (Rasch), 2PL, and 3PL IRT models using `mirt`. The 2PL model is selected because item discriminations vary meaningfully across items. The 3PL model is documented but excluded because it did not converge and is theoretically less appropriate for many constructed-response items.
 
+Model selection relies on relative fit (AIC, BIC, LRT). A global limited-information absolute-fit statistic (C2) is documented but not estimable in practical time under the rotated booklet design, where thousands of item pairs are never co-administered; absolute adequacy is therefore assessed through item-level fit and a local-independence screen instead.
+
 ### Phase 3 - Item Diagnostics
 
-Item parameters are interpreted through ICCs and IIFs. Low-discrimination and extreme-difficulty items are flagged for future item review.
+Item parameters are interpreted through ICCs and IIFs. Low-discrimination and extreme-difficulty items are flagged for future item review. Item-level fit is evaluated with infit and outfit mean-square statistics (robust to the planned missingness), and the unidimensionality and local-independence assumptions are screened with Yen's Q3 residual correlations, conditioned on item co-administration to avoid small-sample artifacts.
 
 ### Phase 4 - Test Information
 
-The TIF identifies the ability range where the item set measures most precisely. Standard error is plotted alongside total information to show where measurement becomes less reliable.
+The TIF identifies the ability range where the item set measures most precisely. Standard error is plotted alongside total information to show where measurement becomes less reliable. Reliability is reported both as empirical reliability from the EAP scores (the value actually achieved under the booklet design) and as TIF-based conditional and marginal reliability for the full item bank, keeping the two clearly distinguished.
 
 ### Phase 5 - DIF Analysis
 
@@ -145,6 +150,7 @@ The Shiny app provides:
 | Visualization | `ggplot2`, `gridExtra` |
 | Reporting | `Quarto` |
 | Dashboard | `shiny`, `bslib`, `DT` |
+| Reproducibility | `renv` |
 | Deployment | GitHub Pages |
 
 ## Setup
@@ -170,6 +176,21 @@ install.packages(c(
   "DT",
   "quarto"
 ))
+```
+
+### Reproducible environment (renv)
+
+This project uses [`renv`](https://rstudio.github.io/renv/) to pin exact R package versions. If `renv.lock` is present, restore the recorded environment with:
+
+```r
+install.packages("renv")   # if not already installed
+renv::restore()
+```
+
+To (re)generate the lockfile after changing dependencies:
+
+```r
+renv::snapshot()
 ```
 
 Create the local data folders if needed:

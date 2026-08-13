@@ -48,14 +48,13 @@ $env:Path = "$(Split-Path $QuartoBin -Parent);$env:Path"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $repoRoot
-$quartoLocalAppData = Join-Path $repoRoot ".quarto-local"
-New-Item -ItemType Directory -Force $quartoLocalAppData | Out-Null
-$env:LOCALAPPDATA = $quartoLocalAppData
 
-$sassCache = Join-Path $env:LOCALAPPDATA "quarto\sass"
-if (Test-Path $sassCache) {
-    Remove-Item -LiteralPath $sassCache -Recurse -Force
-}
+# Use Quarto's normal per-user cache (do NOT redirect LOCALAPPDATA into the
+# project). Redirecting it to a project-local folder made rendering fragile:
+# clearing or deleting that folder left Quarto unable to resolve its compiled
+# syntax-highlighting assets. Reset it explicitly in case a prior run in the
+# same shell left the variable pointing elsewhere.
+$env:LOCALAPPDATA = Join-Path $env:USERPROFILE "AppData\Local"
 
 & $QuartoBin render "analysis\irt_analysis.qmd" --to html
 if ($LASTEXITCODE -ne 0) {

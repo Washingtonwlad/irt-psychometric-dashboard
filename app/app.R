@@ -166,7 +166,7 @@ ui <- navbarPage(
         column(12,
           h3("Differential Item Functioning - OECD vs Non-OECD"),
           p(sprintf(
-            "Lord's chi-square test on 2PL parameters (a, d). Adjusted p-values use Bonferroni correction. %s of %s items (%.1f%%) show significant DIF at alpha = 0.05.",
+            "Lord's chi-square test on 2PL parameters (a, d). Adjusted p-values use the Holm step-down correction, which controls the family-wise error rate. %s of %s items (%.1f%%) show significant DIF at Holm-adjusted alpha = 0.05.",
             dif_count,
             item_count,
             dif_rate
@@ -383,7 +383,8 @@ server <- function(input, output, session) {
                  linetype = "dashed", color = "black", linewidth = 0.8) +
       scale_fill_manual(values = c("DIF" = "#E84855", "No DIF" = "#2E86AB")) +
       coord_flip() +
-      labs(x = "Item", y = "chi-square statistic", fill = "") +
+      labs(x = "Item", y = "chi-square statistic", fill = "",
+           caption = "Dashed line = uncorrected reference (alpha = .05, df = 2). DIF/No DIF decided by Holm-adjusted p.") +
       theme_minimal(base_size = 9)
   })
 
